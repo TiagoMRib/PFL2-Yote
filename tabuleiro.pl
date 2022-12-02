@@ -1,4 +1,10 @@
 
+
+
+% pos(+Board,+X,+Y,-Element).
+% Returns the value of the position (X,Y).
+
+
 % STARTER BOARD
 
 casa(1, 1, Vazia).
@@ -42,7 +48,16 @@ casa(6, 3, Vazia).
 casa(6, 4, Vazia).
 casa(6, 5, Vazia).
 
-% STARTER BOARD
+
+
+% Manipulate Board
+
+remove_from_board(Board,X,Y,New_Board):-
+	empty_board(Empty_Board), %
+	pos(Empty_Board,X,Y,Place),
+	replace(Board,X,Y,Place,New_Board).
+
+
 
 casaToString(X, Y, " "):- casa(X, Y, Vazia).
 casaToString(X, Y, "+"):- casa(X,Y, Branca).
@@ -62,3 +77,13 @@ showBoard(NumLine, [Line|MoreLines]):-
     format('~d |~p|~p|~p|~p|~p|~p|', [NumLine, Line]),
     Next is NumLine + 1,
     showBoard(Next, MoreLines).
+
+
+
+% check BOARD
+
+
+vacant(Board, X, Y) :-
+  between(1, 6, X),
+  between(1, 5, Y),
+  \+(member(piece(X, Y, _), Board)).
