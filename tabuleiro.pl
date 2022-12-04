@@ -34,7 +34,6 @@ casa(4, 3, Vazia).
 casa(4, 4, Vazia).
 casa(4, 5, Vazia).
 
-
 casa(5, 1, Vazia).
 casa(5, 2, Vazia).
 casa(5, 3, Vazia).
@@ -48,7 +47,13 @@ casa(6, 3, Vazia).
 casa(6, 4, Vazia).
 casa(6, 5, Vazia).
 
-
+empty_board([
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,0]
+]).
 
 % Manipulate Board
 
