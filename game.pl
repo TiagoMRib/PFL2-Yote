@@ -1,6 +1,10 @@
+
+
+:- [rules].
+
 % Define the predicate play_game/2, which takes two arguments:
 %   - Board: the current state of the board (represented as a list of lists of integers)
-%   - Color: the color of the current player (1 for white, -1 for black)
+%   - Color: the color of the current player 
 play_game(Board, Color) :-
     repeat, % repeat the game until the player decides to stop
     write('Current board:'), nl,
@@ -9,20 +13,16 @@ play_game(Board, Color) :-
     write('Enter move or type "stop" to quit:'), nl,
     read(Move), % read the player's move
     (Move = stop -> ! ; % if the player wants to stop, then cut and exit
-     (valid_move(Board, Pos, NewPos) -> % if the move is valid, update the board and switch to the next player
-      update_board(Board, Pos, NewPos, NewBoard),
-      switch_player(Color, NewColor),
+     (valid_input(Board, Color, Pos, Move, NewPos, Type) -> % if the move is valid, update the board and switch to the next player
+      update_board(Board, Pos, NewPos, Type, NewBoard),  %if the type is jump we must erase the piece from (Pos + Dir) as well
+      opponent(Color, NewColor),
       play_game(NewBoard, NewColor)
      ;
       write('Invalid move'), nl % if the move is invalid, print an error message and repeat the game
      )
     ).
 
-% Define the predicate switch_player/2, which takes two arguments:
-%   - Color: the color of the current player (1 for white, -1 for black)
-%   - NewColor: the color of the next player (1 for white, -1 for black)
-switch_player(1, -1).
-switch_player(-1, 1).
+
 
 % Define the predicate set_board_element/4, which takes four arguments:
 %   - Board: the current state of the board (represented as a list of lists of integers)

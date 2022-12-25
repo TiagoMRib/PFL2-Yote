@@ -8,6 +8,8 @@ enemy(Board,(X,Y),Player):-
 	player_piece(N,Piece), !.
 
 
+
+
 % Define the predicate move/3, which takes three arguments:
 %   - Pos: the current position of the piece (represented as a pair of integers)
 %   - Dir: the direction in which the piece is moving (represented as a pair of integers)
@@ -88,6 +90,32 @@ valid_jump(Board, Pos, Jump, NewPos, Player) :-
     empty(Board, NewPos).
 
 
+% Define the predicate valid_input/6, which takes four arguments:
+%   - Board: the current state of the board (represented as a list of lists of integers)
+%   - Pos: the current position of the piece (represented as a pair of integers)
+%   - Dir: the direction intended for the piece (represented as a pair of integers)
+%   - NewPos: the new position of the piece after making the move
+%   - Type of movement: the type of movement the piece took
+
+valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Move) :-
+    NewX is X + DX,
+    NewY is Y + DY,
+    valid_move(Board, (X, Y), (NewX, NewY)).
+
+valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
+    JX is X + DX,
+    JY is Y + DY,
+    NewX is X + 2*DX,
+    NewY is Y + 2*DY,
+    valid_jump(Board, (X, Y), (JX, JY), (NewX, NewY), Player).
+
+
+
+% Define the predicate valid_moves/4, which takes four arguments:
+%   - Board: the current state of the board (represented as a list of lists of integers)
+%   - Pos: the current position of the piece (represented as a pair of integers)
+%   - Moves: the list of moves that are valid
+%   - Player: the player 
 
 valid_moves(Board, Pos, Moves, Player) :-
     findall(NewPos, valid_move(Board, Pos, NewPos), Moves).   %moves
@@ -119,57 +147,4 @@ valid_chain(Board, Pos, Moves, Player) :-
 
 
 
-
-move(Board,Xi,Yi,Xf,Yf,New_Board):-
-	pos(Board,Xi,Yi,Piece),
-	remove_from_board(Board,Xi,Yi,Temp_Board),
-	promote(Yf,Piece,Piece2),
-	replace(Temp_Board,Xf,Yf,Piece2,New_Board).
-
-
-% capture(+Board,+Piece, +Dir,+Xi,+Yi,-cena pra returnar novo board)
-
-capture(Board, Piece, Left, X,Y, ):-
-	X > 2,
-	X1 is X - 1,
-	opponent(Board,X1,Y,white),
-	X2 is X - 2,
-	vacant(Board,X2,Y),
-	move(Board,X,Y,X2,Y,Temp_Board),
-	remove_from_board(Temp_Board,X1,Y,New_Board).
-
-
-canMove(X, Y, Up):- 
-    Y > 1,
-    Next is Y - 1,
-    casa(X, Next, Vazia).
-
-canMove(X, Y, Up):- 
-    Y > 1, 
-    Next is Y - 1,
-    casa(X, Next, _).
-
-
-canMove(X, Y, Down):-
-    Y < 5, 
-    Next is Y + 1,
-    casa(X, Next, Vazia).
-
-canMove(X, Y, Left):- 
-    X > 1, 
-    Next is X - 1,
-    casa(Next, Y, Vazia).
-
-canMove(X, Y, Right):- 
-    X < 6, 
-    Next is X + 1,
-    casa(Next, Y, Vazia).
-
-
-
-
-capture(piece(X, Y, Color), Motion, End) :-
-  opponent(Color, Other),
-  select(piece(Other, _, X, Y),     Motion, Motion2),
-  End = [piece(Color, Which, X, Y) | Motion2].
 
