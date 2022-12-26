@@ -5,7 +5,8 @@
 % Define the predicate play_game/2, which takes two arguments:
 %   - Board: the current state of the board (represented as a list of lists of integers)
 %   - Color: the color of the current player 
-play_game(Board, Color) :-
+%   - PlayerType: if it's human or a bot
+play_game(Board, Color, Human) :-
     repeat, % repeat the game until the player decides to stop
     write('Current board:'), nl,
     print_board(Board), % print the current board
@@ -16,11 +17,27 @@ play_game(Board, Color) :-
      (valid_input(Board, Color, Pos, Move, NewPos, Type) -> % if the move is valid, update the board and switch to the next player
       update_board(Board, Pos, NewPos, Type, NewBoard),  %if the type is jump we must erase the piece from (Pos + Dir) as well
       opponent(Color, NewColor),
-      play_game(NewBoard, NewColor)
+      nextPlayer(Human, Next)
+      play_game(NewBoard, NewColor, Next)
      ;
       write('Invalid move'), nl % if the move is invalid, print an error message and repeat the game
      )
     ).
+
+play_game(Board, Color, NoobBot) :-
+    repeat, % repeat the game until the player decides to stop
+    write('Current board:'), nl,
+    print_board(Board), % print the current board
+    write('Current player: '), write(Color), nl,
+    .
+
+play_game(Board, Color, ProBot) :-
+    repeat, % repeat the game until the player decides to stop
+    write('Current board:'), nl,
+    print_board(Board), % print the current board
+    write('Current player: '), write(Color), nl,
+
+    .
 
 
 

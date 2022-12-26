@@ -117,11 +117,13 @@ valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
 %   - Moves: the list of moves that are valid
 %   - Player: the player 
 
-valid_moves(Board, Pos, Moves, Player) :-
-    findall(NewPos, valid_move(Board, Pos, NewPos), Moves).   %moves
+
+
+valid_moves(Board, Pos, Moves, Player):-
+    findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves),   %jumps
 
 valid_moves(Board, Pos, Moves, Player) :-
-    findall(NewPos, (valid_jump(Board, Pos, _, NewPos, Player), \+ member(NewPos, Moves)), NewMoves),   %jumps
+    findall(NewPos, (valid_move(Board, Pos, NewPos), \+ member(NewPos, Moves)), NewMoves),   %moves   
     append(Moves, NewMoves, Moves).
 
 
@@ -141,8 +143,9 @@ chain_capture(_, Pos, Captures, Pos, Player) :- % base case: no more jumps are p
     \+ valid_jump(_, Pos, _, _,  Player), % no more jumps are possible
     Captures \= []. % Captures must not be empty
 
-valid_chain(Board, Pos, Moves, Player) :-
+valid_chains(Board, Pos, Moves, Player) :-
    findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures).
+
 
 
 
