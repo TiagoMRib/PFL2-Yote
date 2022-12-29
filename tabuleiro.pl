@@ -38,8 +38,7 @@ aux_create_row(Size, Type, CurrentRow, Result):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    Changes an element on the board   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 % changes an element on the board given by the position <Row> and <Col>, and change it to the element <NewElement>
-change_board_element(Row, Col, NewElement, NewGameBoard):-
-    create_board(GameBoard),
+change_board_element(GameBoard, Row, Col, NewElement, NewGameBoard):-
     aux_change_board_element(GameBoard, 1, Row, Col, NewElement, [], NewGameBoard).
 
 % auxiliar function that changes an element on the board
