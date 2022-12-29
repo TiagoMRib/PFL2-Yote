@@ -1,3 +1,5 @@
+:- use_module(library(lists)).
+
 create_board(GameBoard):-
     create_empty_board(5, 6, GameBoard).
 
@@ -77,3 +79,37 @@ aux_change_row_element([_|Rest], CurrentCol, ColNum, NewElement, SavedRow, NewRo
     NewColNum is CurrentCol + 1,
     append(SavedRow, [NewElement], NewSavedRow),
     aux_change_row_element(Rest, NewColNum, ColNum, NewElement, NewSavedRow, NewRow).
+
+
+% Define the predicate empty/2, which takes two arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the position of the piece to be evaluated (represented as a pair of integers)
+empty(Board, (X,Y)):-
+    write('Checking if element at coordinates ('), write(X), write(', '), write(Y), write(') is empty...'), nl,
+    nth1(Y, Board, Row),
+    nth1(X, Row, Element),
+    write('The element there is:'), write(Element), nl,
+    (   Element =:= 0;   
+        var(Element)
+    ).
+
+% Define the predicate pos/2, which takes two arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the position of the piece to be evaluated (represented as a pair of integers)
+%   - Simbol: the simbol in that position
+pos(Board, (X,Y), Simbol):-
+    nth1(Y, Board, Row),
+    nth1(X, Row, Simbol).
+
+
+% Define the predicate inside_board/2, which takes two arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the position to be evaluated (represented as a pair of integers)
+inside_board(Board, (X,Y)):-
+    length(Board, NumRows),
+    X > 0,
+    X =< NumRows,
+    nth1(X, Board, Row),
+    length(Row, NumCols),
+    Y > 0,
+    Y =< NumCols.
