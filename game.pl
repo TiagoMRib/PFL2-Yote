@@ -2,6 +2,25 @@
 
 :- [rules].
 
+dynamic(number_pieces/2).
+
+set_pieces(Player, Number):-
+    retract(number_pieces(_, _)),
+    assert(number_pieces(Player, Number)).
+
+start_game():-
+    write('Welcome to the game of Yote'), nl,
+    write('There are three types of player:'), nl,
+    write('Human'), nl,
+    write('NoobBot - a not so smart AI'), nl,
+    write('ProBot - an agressive AI that will try to capture you at all costs'), nl,
+    write('Player 1 type: '), write(Player1), nl,
+    write('Player 2 type: '), write(Player2), nl,
+    set_pieces(white, 12),
+    set_pieces(black, 12),
+    define_players(Player1, Player2),
+
+
 % Define the predicate play_game/2, which takes two arguments:
 %   - Board: the current state of the board (represented as a list of lists of integers)
 %   - Color: the color of the current player 

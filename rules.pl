@@ -2,6 +2,8 @@
 opponent(white, black).
 opponent(black, white).
 
+
+
 enemy(Board,(X,Y),Player):-
 	pos(Board,(X,Y),Piece),
 	opponent(Player,N),
@@ -9,6 +11,11 @@ enemy(Board,(X,Y),Player):-
 
 
 
+
+
+
+place(Board, Pos, NewBoard):-
+    empty(Board, Pos)
 
 % Define the predicate move/3, which takes three arguments:
 %   - Pos: the current position of the piece (represented as a pair of integers)

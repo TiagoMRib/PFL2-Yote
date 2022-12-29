@@ -55,10 +55,23 @@ longer_list([List|Lists], Result) :-
 
 chooseMove(Board, Pos, Color, NoobBot, Move):-
     valid_moves(Board, Pos, Moves, Color),
+    \+lenght(Moves, 0),
     random_member(Move, Moves).
 
 chooseMove(Board, Pos, Color, ProBot, Move):-
     valid_chains(Board, Pos, Captures, Player),
     \+length(Captures, 0),
     longer_list(Captures, Move).
+
+
+chooseMove(Board, Pos, Color, ProBot, Move):-
+    valid_moves(Board, Pos, [Move| Tail], Color),
+    \+length([Move| Tail], 0).
+
+
+
+
+
+
+
     
