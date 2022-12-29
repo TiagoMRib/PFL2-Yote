@@ -2,6 +2,9 @@
 opponent(white, black).
 opponent(black, white).
 
+is_mine(white, w).
+is_mine(black, b).
+
 
 
 enemy(Board,(X,Y),Player):-
@@ -10,6 +13,11 @@ enemy(Board,(X,Y),Player):-
 	player_piece(N,Piece), !.
 
 
+delete_pos(Board, (X,Y), NewBoard):-
+    change_board_element(Board, X, Y, 0, NewBoard).
+
+set_pos(Board, (X,Y), Simbol, NewBoard):-
+    change_board_element(Board, X, Y, Simbol, NewBoard),
 
 
 
