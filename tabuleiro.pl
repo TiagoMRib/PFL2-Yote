@@ -1,94 +1,80 @@
+create_board(GameBoard):-
+    create_empty_board(5, 6, GameBoard).
+
+% creates and returns the empty side of the board
+create_empty_board(Rows, Columns, Result):-
+    create_row(Columns, 0, EmptyRow),
+    aux_create_empty_board(Rows, EmptyRow, [], Result).
+
+% auxiliar function that creates and returns the empty side of the board
+aux_create_empty_board(Size, EmptyRow, CurrentBoard, Result):-
+    Size =:= 1,
+    append(CurrentBoard, [EmptyRow], Result).
+
+aux_create_empty_board(Size, EmptyRow, CurrentBoard, Result):-
+    Size > 1,
+    append(CurrentBoard, [EmptyRow], NewBoard),
+    NewSize is Size - 1,
+    aux_create_empty_board(NewSize, EmptyRow, NewBoard, Result).
+
+% creates and returns a row with <Size> elements of a fiven <Type>
+create_row(Size, Type, Result):-
+    aux_create_row(Size, Type, [], Result).
+
+% auxiliar function that creates and returns a row with <Size> elements of a fiven <Type>
+aux_create_row(0, _, _, []).
+
+aux_create_row(Size, Type, CurrentRow, Result):-
+    Size =:= 1,
+    append(CurrentRow, [Type], Result).
+
+aux_create_row(Size, Type, CurrentRow, Result):-
+    Size > 1,
+    append(CurrentRow, [Type], NewCurrentRow),
+    NewSize is Size - 1,
+    aux_create_row(NewSize, Type, NewCurrentRow, Result).
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    Changes an element on the board   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-% pos(+Board,+X,+Y,-Element).
-% Returns the value of the position (X,Y).
+% changes an element on the board given by the position <Row> and <Col>, and change it to the element <NewElement>
+change_board_element(Row, Col, NewElement, NewGameBoard):-
+    create_board(GameBoard),
+    aux_change_board_element(GameBoard, 1, Row, Col, NewElement, [], NewGameBoard).
 
+% auxiliar function that changes an element on the board
+aux_change_board_element([], _, _, _, _, SavedBoard, NewGameBoard):-
+    NewGameBoard = SavedBoard.
 
-% STARTER BOARD
+aux_change_board_element([Row|Rest], CurrentRowNum, RowNum, ColNum, NewElement, SavedBoard, NewGameBoard):-
+    \+ CurrentRowNum = RowNum,
+    NewRowNum is CurrentRowNum + 1,
+    append(SavedBoard, [Row], NewSavedBoard),
+    aux_change_board_element(Rest, NewRowNum, RowNum, ColNum, NewElement, NewSavedBoard, NewGameBoard).
 
-casa(1, 1, Vazia).
-casa(1, 2, Vazia).
-casa(1, 3, Vazia).
-casa(1, 4, Vazia).
-casa(1, 5, Vazia).
+aux_change_board_element([Row|Rest], CurrentRowNum, RowNum, ColNum, NewElement, SavedBoard, NewGameBoard):-
+    CurrentRowNum = RowNum,
+    NewRowNum is CurrentRowNum + 1,
+    change_row_element(Row, ColNum, NewElement, NewRow),
+    append(SavedBoard, [NewRow], NewSavedBoard),
+    aux_change_board_element(Rest, NewRowNum, RowNum, ColNum, NewElement, NewSavedBoard, NewGameBoard).
 
+% changes an element on the row given by the position <ColumnNum>, and change it to the element <NewElement>
+change_row_element(Row, ColumnNum, NewElement, NewRow):-
+    aux_change_row_element(Row, 1, ColumnNum, NewElement, [], NewRow).
 
-casa(2, 1, Vazia).
-casa(2, 2, Vazia).
-casa(2, 3, Vazia).
-casa(2, 4, Vazia).
-casa(2, 5, Vazia).
+% auxiar function that changes an element on the row
+aux_change_row_element([], _, _, _, SavedRow, NewRow):-
+    NewRow = SavedRow.
 
+aux_change_row_element([Cell|Rest], CurrentCol, ColNum, NewElement, SavedRow, NewRow):-
+    \+ CurrentCol = ColNum,
+    NewColNum is CurrentCol + 1,
+    append(SavedRow, [Cell], NewSavedRow),
+    aux_change_row_element(Rest, NewColNum, ColNum, NewElement, NewSavedRow, NewRow).
 
-casa(3, 1, Vazia).
-casa(3, 2, Vazia).
-casa(3, 3, Vazia).
-casa(3, 4, Vazia).
-casa(3, 5, Vazia).
-
-
-casa(4, 1, Vazia).
-casa(4, 2, Vazia).
-casa(4, 3, Vazia).
-casa(4, 4, Vazia).
-casa(4, 5, Vazia).
-
-casa(5, 1, Vazia).
-casa(5, 2, Vazia).
-casa(5, 3, Vazia).
-casa(5, 4, Vazia).
-casa(5, 5, Vazia).
-
-
-casa(6, 1, Vazia).
-casa(6, 2, Vazia).
-casa(6, 3, Vazia).
-casa(6, 4, Vazia).
-casa(6, 5, Vazia).
-
-empty_board([
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0]
-]).
-
-% Manipulate Board
-
-remove_from_board(Board,X,Y,New_Board):-
-	empty_board(Empty_Board), %
-	pos(Empty_Board,X,Y,Place),
-	replace(Board,X,Y,Place,New_Board).
-
-
-
-casaToString(X, Y, " "):- casa(X, Y, Vazia).
-casaToString(X, Y, "+"):- casa(X,Y, Branca).
-casaToString(X, Y, "*"):- casa(X,Y, Preta).
-
-
-    
-
-
-
-
-showBoard(6, []).
-showboard(0, []):-
-    write('  |1|2|3|4|5|6|').
-
-showBoard(NumLine, [Line|MoreLines]):-
-    format('~d |~p|~p|~p|~p|~p|~p|', [NumLine, Line]),
-    Next is NumLine + 1,
-    showBoard(Next, MoreLines).
-
-
-
-% check BOARD
-
-
-vacant(Board, X, Y) :-
-  between(1, 6, X),
-  between(1, 5, Y),
-  \+(member(piece(X, Y, _), Board)).
+aux_change_row_element([_|Rest], CurrentCol, ColNum, NewElement, SavedRow, NewRow):-
+    CurrentCol = ColNum,
+    NewColNum is CurrentCol + 1,
+    append(SavedRow, [NewElement], NewSavedRow),
+    aux_change_row_element(Rest, NewColNum, ColNum, NewElement, NewSavedRow, NewRow).
