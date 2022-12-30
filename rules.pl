@@ -56,22 +56,29 @@ move((X,Y), (DX,DY), (NewX,NewY)) :-
 valid_move(Board, Pos, NewPos) :-
     move(Pos, (1,0), NewPos),     %getting pos
     inside_board(Board, NewPos),  %if pos is inside board
-    empty(Board, NewPos).        %if pos is vacant
+    empty(Board, NewPos),        %if pos is vacant
+    write('One valid move to '), write(NewPos), nl.
 
 valid_move(Board, Pos, NewPos) :-
-    move(Pos, (-1,-0), NewPos),
+    move(Pos, (-1,0), NewPos),
     inside_board(Board, NewPos),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid move to '), write(NewPos), nl.
 
 valid_move(Board, Pos, NewPos) :-
     move(Pos, (0,1), NewPos),
     inside_board(Board, NewPos),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid move to '), write(NewPos), nl.
 
 valid_move(Board, Pos, NewPos) :-
     move(Pos, (0,-1), NewPos),
     inside_board(Board, NewPos),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid move to '), write(NewPos), nl.
+
+%valid_move(_, _, _) :-
+%   write('No more valid moves'), nl.
 
 
 
@@ -96,28 +103,37 @@ valid_jump(Board, Pos, Jump, NewPos, Player) :-
     inside_board(Board, Jump),         
     inside_board(Board, NewPos),
     enemy(Board, Jump, Player),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid jump to '), write(NewPos), nl.
 
 valid_jump(Board, Pos, Jump, NewPos, Player) :-
     jump(Pos, Jump, (-1,0), NewPos),
     inside_board(Board, Jump),         
     inside_board(Board, NewPos),
     enemy(Board, Jump, Player),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid jump to '), write(NewPos), nl.
 
 valid_jump(Board, Pos, Jump, NewPos, Player) :-
     jump(Pos, Jump, (0,1), NewPos),
     inside_board(Board, Jump),         
     inside_board(Board, NewPos),
     enemy(Board, Jump, Player),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid jump to '), write(NewPos), nl.
 
 valid_jump(Board, Pos, Jump, NewPos, Player) :-
     jump(Pos, Jump, (0,-1), NewPos),
     inside_board(Board, Jump),         
     inside_board(Board, NewPos),
     enemy(Board, Jump, Player),
-    empty(Board, NewPos).
+    empty(Board, NewPos),
+    write('One valid jump to '), write(NewPos), nl.
+
+%valid_jump(_, _, _, _, _) :-
+%   write('No more valid jumps'), nl.
+
+
 
 
 % Define the predicate valid_input/6, which takes four arguments:
@@ -149,12 +165,16 @@ valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
 
 
 
-valid_moves(Board, Pos, Moves, Player):-
-    findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves).   %jumps
 
-valid_moves(Board, Pos, Moves, Player) :-
-    findall(NewPos, (valid_move(Board, Pos, NewPos), \+ member(NewPos, Moves)), NewMoves),   %moves   
-    append(Moves, NewMoves, Moves).
+
+valid_moves(Board, Pos, Result, Player) :-   
+    write('searching jumps'),
+    findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves),
+    write('Moves:'), write(Moves), nl,
+    write('going for the moves now'),
+    findall(NewPos, (valid_move(Board, Pos, NewPos)), NewMoves),   %moves  
+    write('NewMoves here:'), write(NewMoves), nl,
+    append(NewMoves, Moves, Result).
 
 
 
@@ -165,16 +185,27 @@ valid_moves(Board, Pos, Moves, Player) :-
 %   - Pos: the current position of the piece (represented as a pair of integers)
 %   - Captures: the list of positions of the pieces captured in the chain capture
 %   - NewPos: the final position of the piece after making the chain capture
-chain_capture(Board, Pos, Captures, NewPos, Player) :-
-    valid_jump(Board, Pos, Jump, NewPos, Player), % make a single jump
-    chain_capture(Board, NewPos, [Jump|Captures], NewPos, Player). % continue the chain capture
+chain_capture(Board, Pos, [Capture|Rest], NewPos, Player) :-
+    valid_jump(Board, Pos, Capture, NewPos, Player), % make a single jump
+    write('Piece being jumped:'),write(Capture), nl,
+    delete_pos(Board, Capture, NewBoard),
+    chain_capture(NewBoard, NewPos, Rest, _, Player). % continue the chain capture
 
-chain_capture(_, Pos, Captures, Pos, Player) :- % base case: no more jumps are possible
-    \+ valid_jump(_, Pos, _, _,  Player), % no more jumps are possible
-    Captures \= []. % Captures must not be empty
+chain_capture(Board, Pos, [], Pos, _) :- % base case: no more jumps are possible
+    \+valid_jump(Board, Pos, _, _, Player),
+    write('No more jumps are possible'), nl.
+
+%chain_capture(_, Pos, Captures, Pos, Player) :- % base case: no more jumps are possible
+%    \+ valid_jump(_, Pos, _, _,  Player), % no more jumps are possible
+%    write('No more jumps are possible'),
+%    Captures \= []. % Captures must not be empty
+
+
 
 valid_chains(Board, Pos, Captures, Player) :-
-   findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures).
+    write('Entering'), nl,
+   findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures),
+   write(Captures).
 
 
 
