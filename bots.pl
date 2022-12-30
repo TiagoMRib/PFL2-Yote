@@ -1,9 +1,7 @@
-<<<<<<< Updated upstream
-=======
+
 :- use_module(library(lists)).
 :- use_module(library(random)).
 
->>>>>>> Stashed changes
 dynamic(nextPlayer/2).
 
 define_players(Human, Human):-
@@ -85,9 +83,6 @@ chooseMove(Board, Pos, Color, proBot, Move):-
 chooseMove(Board, Pos, Color, proBot, Move):-
     write('Entred here'),
     valid_moves(Board, Pos, [Move| Tail], Color),
-<<<<<<< Updated upstream
-    \+length([Move| Tail], 0).
-=======
     write('Moves available for Pro:'), write(Captures), nl,
     \+length([Move| Tail], 0),
     write('he chooses:'), write(Move), nl, nl.
@@ -106,4 +101,4 @@ typeofMove(Move, chain):-
      \+length(Move, 1).
 
 
->>>>>>> Stashed changes
+
