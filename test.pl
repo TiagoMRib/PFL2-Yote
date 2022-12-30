@@ -1,4 +1,5 @@
 :- consult('rules.pl').
+:- consult('bots.pl').
 
 teste(Result) :-
     create_board(GameBoard),
@@ -60,4 +61,28 @@ teste_chain(Moves) :-
     chain_Board(Board),
     valid_chains(Board, (3,3), Moves, white),
     write(Moves).
+
+capture_Board([[0,0,0,0,0,0],
+               [0,0,b,0,b,0],
+               [0,b,w,0,0,b],
+               [b,0,0,0,b,0],
+               [0,0,0,0,0,0]]).
+
+teste_bots(_) :-
+    chain_Board(Board),
+    chooseMove(Board, (3,3), white, noobBot, Move),
+    write('Idiot:'),write(Move),nl,
+    chooseMove(Board, (3,3), white, proBot, OtherMove),
+    write('Smart:'),write(OtherMove),nl.
+
+
+teste_smartbot(_):-
+    capture_Board(Board),
+    chooseMove(Board, (3,3), white, proBot, OtherMove),
+    write('Smart:'),write(OtherMove),nl,
+    typeofMove(OtherMove, Type),
+    write(Type), nl.
+
+
+
 

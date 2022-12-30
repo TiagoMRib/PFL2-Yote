@@ -1,3 +1,9 @@
+<<<<<<< Updated upstream
+=======
+:- use_module(library(lists)).
+:- use_module(library(random)).
+
+>>>>>>> Stashed changes
 dynamic(nextPlayer/2).
 
 define_players(Human, Human):-
@@ -40,29 +46,64 @@ define_players(ProBot, ProBot):-
 % HELPER
 
 % Define the predicate longer_list/2, which takes a list of lists and a result list as arguments
-longer_list([List|Lists], Result) :-
-    % If the list of lists is empty, the result is the empty list
-    (Lists = [] -> Result = List ;
-     % Otherwise, compare the lengths of the first list and the result list
-     (length(List, Length1), length(Result, Length2),
-      % If the first list is longer, it becomes the new result
-      (Length1 > Length2 -> longer_list(Lists, List) ;
-       % If the result list is longer or they have the same length, keep the result list as is
-       longer_list(Lists, Result)))).
+longest_list(List, Longest) :-
+    longest_list(List, [], Longest).
+
+longest_list([], Longest, Longest).
+longest_list([H|T], Current, Longest) :-
+    (   length(H, L),
+        length(Current, CL),
+        L > CL
+    ->  longest_list(T, H, Longest)
+    ;   longest_list(T, Current, Longest)
+    ).
+
+head_of_list([X|_], X).
 
 % HELPER
 
-chooseMove(Board, Pos, Color, NoobBot, Move):-
+chooseMove(Board, Pos, Color, noobBot, Move):-
     valid_moves(Board, Pos, Moves, Color),
-    \+lenght(Moves, 0),
-    random_member(Move, Moves).
+    write('Moves available for Noob:'), write(Moves), nl,
+    \+length(Moves, 0),
+    random_member(Move, Moves),
+    write('he chooses:'), write(Move), nl, nl.
 
-chooseMove(Board, Pos, Color, ProBot, Move):-
-    valid_chains(Board, Pos, Captures, Player),
+
+
+    
+chooseMove(Board, Pos, Color, proBot, Move):-
+    once((valid_chains(Board, Pos, Captures, Color),
+    write('Chains available for Pro:'), write(Captures), nl,
     \+length(Captures, 0),
-    longer_list(Captures, Move).
+    head_of_list(Captures, Head),
+    \+length(Head, 0),
+    longest_list(Captures, Move),
+    write('he chooses:'), write(Move), nl, nl)).
 
 
-chooseMove(Board, Pos, Color, ProBot, Move):-
+chooseMove(Board, Pos, Color, proBot, Move):-
+    write('Entred here'),
     valid_moves(Board, Pos, [Move| Tail], Color),
+<<<<<<< Updated upstream
     \+length([Move| Tail], 0).
+=======
+    write('Moves available for Pro:'), write(Captures), nl,
+    \+length([Move| Tail], 0),
+    write('he chooses:'), write(Move), nl, nl.
+
+
+
+typeofMove((_,_), move).
+
+
+typeofMove(Move, jump):-
+    length(Move, 1).
+
+
+typeofMove(Move, chain):-
+    \+length(Move, 0),
+     \+length(Move, 1).
+
+
+>>>>>>> Stashed changes
