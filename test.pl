@@ -63,22 +63,33 @@ teste_chain(Moves) :-
     write(Moves).
 
 capture_Board([[0,0,0,0,0,0],
-               [0,0,b,0,b,0],
+               [0,0,b,0,b,w],
                [0,b,w,0,0,b],
                [b,0,0,0,b,0],
                [0,0,0,0,0,0]]).
 
+
+teste_pos(Result):-
+    capture_Board(Board),
+    pos(Board, Result, w).
+
+
+teste_inteligence(Result):-
+    capture_Board(Board),
+    intelligence(Board, white, noobBot, Result).
+
+
 teste_bots(_) :-
-    chain_Board(Board),
-    chooseMove(Board, (3,3), white, noobBot, Move),
+    capture_Board(Board),
+    chooseMove(Board, (X,Y), white, noobBot, Move),
     write('Idiot:'),write(Move),nl,
-    chooseMove(Board, (3,3), white, proBot, OtherMove),
+    chooseMove(Board, (X,Y), white, proBot, OtherMove),
     write('Smart:'),write(OtherMove),nl.
 
 
 teste_smartbot(_):-
     capture_Board(Board),
-    chooseMove(Board, (3,3), white, proBot, OtherMove),
+    chooseMove(Board, (6,2), white, proBot, OtherMove),
     write('Smart:'),write(OtherMove),nl,
     typeofMove(OtherMove, Type),
     write(Type), nl.

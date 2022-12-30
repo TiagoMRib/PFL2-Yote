@@ -70,7 +70,7 @@ chooseMove(Board, Pos, Color, noobBot, Move):-
 
 
     
-chooseMove(Board, Pos, Color, proBot, Move):-
+chooseMove(Board, Pos, Color, proBot, Move):-    
     once((valid_chains(Board, Pos, Captures, Color),
     write('Chains available for Pro:'), write(Captures), nl,
     \+length(Captures, 0),
@@ -80,7 +80,7 @@ chooseMove(Board, Pos, Color, proBot, Move):-
     write('he chooses:'), write(Move), nl, nl)).
 
 
-chooseMove(Board, Pos, Color, proBot, Move):-
+chooseMove(Board, Pos, Color, proBot, Move):- 
     write('Entred here'),
     valid_moves(Board, Pos, [Move| Tail], Color),
     write('Moves available for Pro:'), write(Captures), nl,
@@ -88,15 +88,24 @@ chooseMove(Board, Pos, Color, proBot, Move):-
     write('he chooses:'), write(Move), nl, nl.
 
 
+find_pieces(Board, Color, Pieces):-
+    findall(Result, pos(Board, Result, w), Pieces).
 
-typeofMove((_,_), move).
 
 
-typeofMove(Move, jump):-
+
+
+typeofMove(Board, (X,Y), jump):-
+    \+empty(Board, (X,Y)).
+
+typeofMove(Board, (X,Y), move):-
+    empty(Board, (X,Y)).
+
+typeofMove(_, Move, jump):-
     length(Move, 1).
 
 
-typeofMove(Move, chain):-
+typeofMove(_, Move, chain):-
     \+length(Move, 0),
      \+length(Move, 1).
 
