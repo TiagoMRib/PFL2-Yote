@@ -1,12 +1,40 @@
+:- consult('tabuleiro.pl').
 
 opponent(white, black).
 opponent(black, white).
 
+is_mine(white, w).
+is_mine(black, b).
+is_mine(empty, 0).
+
+
+% Define the predicate enemy/3, which takes three arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the position of the piece to be evaluated (represented as a pair of integers)
+%   - Player: the player making the move
+% Checks if the content of Pos is enemy of Player
 enemy(Board,(X,Y),Player):-
 	pos(Board,(X,Y),Piece),
-	opponent(Player,N),
-	player_piece(N,Piece), !.
+    is_mine(Owner, Piece),
+	opponent(Player, Owner), !.
 
+
+delete_pos(Board, (X,Y), NewBoard):-
+    change_board_element(Board, X, Y, 0, NewBoard).
+
+set_pos(Board, (X,Y), Simbol, NewBoard):-
+    change_board_element(Board, X, Y, Simbol, NewBoard).
+
+
+
+% Define the predicate place/4, which takes four arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the current position of the piece (represented as a pair of integers)
+%   - Player: the player making the move
+%   - NewBoard: the new state of the board (represented as a list of lists of simbols)
+place(Board, Pos, Player, NewBoard):-
+    is_mine(Player, Simbol),
+    set_pos(Board, Pos, Simbol, NewBoard).
 
 
 
@@ -120,7 +148,7 @@ valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
 
 
 valid_moves(Board, Pos, Moves, Player):-
-    findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves),   %jumps
+    findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves).   %jumps
 
 valid_moves(Board, Pos, Moves, Player) :-
     findall(NewPos, (valid_move(Board, Pos, NewPos), \+ member(NewPos, Moves)), NewMoves),   %moves   
@@ -143,11 +171,5 @@ chain_capture(_, Pos, Captures, Pos, Player) :- % base case: no more jumps are p
     \+ valid_jump(_, Pos, _, _,  Player), % no more jumps are possible
     Captures \= []. % Captures must not be empty
 
-valid_chains(Board, Pos, Moves, Player) :-
+valid_chains(Board, Pos, Captures, Player) :-
    findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures).
-
-
-
-
-
-
