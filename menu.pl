@@ -45,8 +45,13 @@ menu_option(0):-
     fail.
 
 menu_option(1):-
-    create_board(GameBoard),
-    write(GameBoard).
+    create_board(GameBoard), nl,
+    %set_pieces(white, 12),
+    %set_pieces(black, 12),
+    %Color = white,
+    %Human = true,
+    play_game(GameBoard).
+    %play_game(GameBoard,Color,Human).
 
 menu_option(2):-
     menu_formater('Choose difficulty'),

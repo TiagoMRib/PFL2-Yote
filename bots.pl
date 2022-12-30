@@ -1,4 +1,3 @@
-
 dynamic(nextPlayer/2).
 
 define_players(Human, Human):-
@@ -67,4 +66,3 @@ chooseMove(Board, Pos, Color, ProBot, Move):-
 chooseMove(Board, Pos, Color, ProBot, Move):-
     valid_moves(Board, Pos, [Move| Tail], Color),
     \+length([Move| Tail], 0).
-  
