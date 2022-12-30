@@ -41,7 +41,8 @@ aux_create_row(Size, Type, CurrentRow, Result):-
 
 % changes an element on the board given by the position <Row> and <Col>, and change it to the element <NewElement>
 change_board_element(GameBoard, Row, Col, NewElement, NewGameBoard):-
-    aux_change_board_element(GameBoard, 1, Row, Col, NewElement, [], NewGameBoard).
+    aux_change_board_element(GameBoard, 1, Col, Row, NewElement, [], NewGameBoard).  % Tava trocado o Row e o Col na lógica
+
 
 % auxiliar function that changes an element on the board
 aux_change_board_element([], _, _, _, _, SavedBoard, NewGameBoard):-
@@ -87,11 +88,8 @@ aux_change_row_element([_|Rest], CurrentCol, ColNum, NewElement, SavedRow, NewRo
 empty(Board, (X,Y)):-
     write('Checking if element at coordinates ('), write(X), write(', '), write(Y), write(') is empty...'), nl,
     nth1(Y, Board, Row),
-    nth1(X, Row, Element),
-    write('The element there is:'), write(Element), nl,
-    (   Element =:= 0;   
-        var(Element)
-    ).
+    nth1(X, Row, 0).
+
 
 % Define the predicate pos/2, which takes two arguments:
 %   - Board: the current state of the board (represented as a list of lists of simbols)
