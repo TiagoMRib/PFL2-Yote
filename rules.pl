@@ -1,3 +1,4 @@
+:- consult('tabuleiro.pl').
 
 
 :- consult('tabuleiro.pl').
@@ -166,7 +167,6 @@ valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
 
 
 
-
 valid_moves(Board, Pos, Result, Player) :-   
     write('searching jumps'),
     findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves),
@@ -206,6 +206,7 @@ valid_chains(Board, Pos, Captures, Player) :-
     write('Entering'), nl,
    findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures),
    write(Captures).
+
 
 
 

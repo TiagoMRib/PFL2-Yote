@@ -40,6 +40,7 @@ verify(Result) :-
     empty(Board, (3,2)).
 
 
+
 teste_valid(Result) :-
     create_board(Board),
     print(Board),
@@ -59,3 +60,4 @@ teste_chain(Moves) :-
     chain_Board(Board),
     valid_chains(Board, (3,3), Moves, white),
     write(Moves).
+
