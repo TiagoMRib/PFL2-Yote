@@ -195,6 +195,10 @@ chain_capture(Board, Pos, [], Pos, _) :- % base case: no more jumps are possible
     \+valid_jump(Board, Pos, _, _, Player),
     write('No more jumps are possible'), nl.
 
+
+chain_capture(Board, Pos, [], _, _) :- % base case: single jump that cannot be continued
+    valid_jump(Board, Pos, _, _, _).
+
 %chain_capture(_, Pos, Captures, Pos, Player) :- % base case: no more jumps are possible
 %    \+ valid_jump(_, Pos, _, _,  Player), % no more jumps are possible
 %    write('No more jumps are possible'),
@@ -210,16 +214,28 @@ valid_chains(Board, Pos, Captures, Player) :-
 
 
 % UNFINISHED
+type_human_move(Board, Color, Pos, NewPos, move):-  
+    valid_move(Board, Pos, NewPos).
 
-type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-
-    CapX is (SX + NX) / 2,
-    CapY is (SY + NY) / 2,
-    chain_capture(Board, (SX, SY), [(CapX, CapY), _ | _], _, Color).
 
 type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-  
-    CapX is (SX + NX) / 2,
-    CapY is (SY + NY) / 2,
-    chain_capture(Board, (SX, SY), [(CapX, CapY)], _, Color).
+    CapX is div(SX + NX, 2),
+    CapY is div(SY + NY, 2),
+    chain_capture(Board, (SX, SY), [(CapX, CapY)], _, Color), !.
+
+
+type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-
+    CapX is div(SX + NX, 2),
+    CapY is div(SY + NY, 2),
+    write((CapX,CapY)),
+    chain_capture(Board, (SX, SY), [(CapX, CapY)|_], _, Color).
+
+
+
+
+
+
+
 
 
 
