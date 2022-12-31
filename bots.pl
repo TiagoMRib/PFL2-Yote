@@ -91,8 +91,11 @@ chooseMove(Board, Pos, Color, proBot, Move):-
 find_pieces(Board, Color, Pieces):-
     findall(Result, pos(Board, Result, w), Pieces).
 
-
-
+%choose_place/2
+%chooses a random empty position to place a piece
+choose_place(Board, Pos):-
+    findall(Pos, empty(Board, Pos), Empties),
+    random_member(Pos, Empties).
 
 
 typeofMove(Board, (X,Y), jump):-
