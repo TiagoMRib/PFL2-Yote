@@ -1,4 +1,5 @@
 :- consult('tabuleiro.pl').
+:- consult('rules.pl').
 
 start_game:- menu.
     %write('Welcome to the game of Yote'), nl,
@@ -20,8 +21,15 @@ start_game:- menu.
 play_game([[]|[]]) :-
     write('Its here'), nl.
 
-play_game(Board) :-
-    display_board(Board), nl.
+play_game(Board, Color) :-
+    write('Current board:'), nl,
+    display_board(Board), nl,
+    write('Current player: '), write(Color), nl,
+    write('Select 1 to place a piece, 2 to move a piece and 3 to quit.'), nl,
+    read(Option),nl,
+    move_chosen(Option, Board, Color, NewBoard),nl,
+    change_color(Color, NewColor),
+    play_game(NewBoard, NewColor).
     %repeat, % repeat the game until the player decides to stop
     %write('Current board:'), nl,
     %print_board(Board), % print the current board
@@ -38,3 +46,27 @@ play_game(Board) :-
     %  write('Invalid move'), nl % if the move is invalid, print an error message and repeat the game
     %)
     %).
+
+move_chosen(1, Board, Type, NewBoard) :-
+    write('Select the position you want to place the piece:'), nl,
+    read(Pos),
+    place(Board, Pos, Type, NewBoard).
+
+move_chosen(2, Board, Type, NewBoard) :-
+    write('Select the position of the piece you want to move:'), nl,
+    read(Pos),nl,
+    write('Choose a direction to move to:'), nl,
+    write('1. Down'), nl,
+    write('2. Up'), nl,
+    write('3. Right'), nl,
+    write('4. Left'), nl,
+    read(Dir),nl,
+    move_piece(Board, Pos, Dir, Type, NewBoard), nl.
+
+move_chosen(3, Board, Type, NewBoard) :-
+    write('Game over'), nl,
+    break.
+
+change_color(white, black).
+change_color(black, white).
+    

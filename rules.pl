@@ -221,10 +221,29 @@ type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-
     CapY is (SY + NY) / 2,
     chain_capture(Board, (SX, SY), [(CapX, CapY)], _, Color).
 
+move_piece(Board, (X,Y), 1, Type, NewBoard):-
+    %valid_input(Board, Pos, Dir, NewPos, Move),
+    %type_human_move(Board, Pos, NewPos, Move),
+    %delete_pos(Board, Pos, TempBoard),
+    %insert_pos(TempBoard, NewPos, 1, NewBoard).
+    %write('hereeeeeee'), nl,
+    %place(Board, (X,Y), 0, MidBoard), nl,
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewY is Y + 1,
+    place(MidBoard, (X,NewY), Type, NewBoard).
+    %change_board_element(MidBoard, X, NewY, Type, NewBoard).
 
+move_piece(Board, (X,Y), 2, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewY is Y - 1,
+    place(MidBoard, (X,NewY), Type, NewBoard).
 
+move_piece(Board, (X,Y), 3, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewX is X + 1,
+    place(MidBoard, (NewX,Y), Type, NewBoard).
 
-
-
-
-
+move_piece(Board, (X,Y), 4, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewX is X - 1,
+    place(MidBoard, (NewX,Y), Type, NewBoard).
