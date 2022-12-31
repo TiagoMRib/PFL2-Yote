@@ -72,10 +72,10 @@ capture_Board([[0,0,0,0,0,0],
 
 teste_sensor(Results):-
     chain_Board(Board),
-    type_human_move(Board, white, (3,3), (1,3), TypeB),
-    write(TypeB), nl,
-    type_human_move(Board, white, (3,3), (3,1), TypeC),
-    write(TypeC), nl.
+    type_human_move(Board, white, (6,2), (4,2), TypeC),
+    write(TypeC), nl,
+    type_human_move(Board, white, (3,3), (3,1), TypeD),
+    write(TypeD), nl.
 
 
 teste_pos(Result):-
