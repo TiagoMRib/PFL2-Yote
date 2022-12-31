@@ -59,8 +59,9 @@ chain_Board([[0,0,0,b,0,0],
 
 teste_chain(Moves) :-
     chain_Board(Board),
-    valid_chains(Board, (3,3), Moves, white),
-    write(Moves).
+    chain_capture(Board, (3,3), Moves, NewPos, white),
+    write(Moves),
+    write(NewPos).
 
 capture_Board([[0,0,0,0,0,0],
                [0,0,b,0,b,w],

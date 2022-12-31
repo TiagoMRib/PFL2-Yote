@@ -209,6 +209,21 @@ valid_chains(Board, Pos, Captures, Player) :-
 
 
 
+% UNFINISHED
+
+type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-
+    CapX is (SX + NX) / 2,
+    CapY is (SY + NY) / 2,
+    chain_capture(Board, (SX, SY), [(CapX, CapY), _ | _], _, Color).
+
+type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-  
+    CapX is (SX + NX) / 2,
+    CapY is (SY + NY) / 2,
+    chain_capture(Board, (SX, SY), [(CapX, CapY)], _, Color).
+
+
+
+
 
 
 
