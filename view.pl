@@ -26,7 +26,7 @@ display_game([GameBoard|_]):-
 
 test:-
     create_board(GameBoard),
-    change_board_element(2, 2, w, NewGameBoard),
+    change_board_element(GameBoard,2, 2, w, NewGameBoard),
     display_board(NewGameBoard).
 
 % visually outputs on the CLI the current player to make the move
