@@ -263,3 +263,31 @@ move_piece(Board, (X,Y), 4, Type, NewBoard):-
     change_board_element(Board, X, Y, 0, MidBoard),
     NewX is X - 1,
     place(MidBoard, (NewX,Y), Type, NewBoard).
+
+move_piece_to_eat(Board, (X,Y), 1, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewY is Y + 1,
+    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
+    FinalY is Y + 2,
+    place(FinalBoard, (X,FinalY), Type, NewBoard).
+
+move_piece_to_eat(Board, (X,Y), 2, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewY is Y - 1,
+    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
+    FinalY is Y - 2,
+    place(FinalBoard, (X,FinalY), Type, NewBoard).
+
+move_piece_to_eat(Board, (X,Y), 3, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewX is X + 1,
+    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
+    FinalX is X + 2,
+    place(FinalBoard, (FinalX,Y), Type, NewBoard).
+
+move_piece_to_eat(Board, (X,Y), 4, Type, NewBoard):-
+    change_board_element(Board, X, Y, 0, MidBoard),
+    NewX is X - 1,
+    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
+    FinalX is X - 2,
+    place(FinalBoard, (FinalX,Y), Type, NewBoard).

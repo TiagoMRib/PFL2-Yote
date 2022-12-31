@@ -25,7 +25,7 @@ play_game(Board, Color) :-
     write('Current board:'), nl,
     display_board(Board), nl,
     write('Current player: '), write(Color), nl,
-    write('Select 1 to place a piece, 2 to move a piece and 3 to quit.'), nl,
+    write('Select 1 to place a piece, 2 to move a piece, 3 to eat a piece and 4 to quit.'), nl,
     read(Option),nl,
     move_chosen(Option, Board, Color, NewBoard),nl,
     change_color(Color, NewColor),
@@ -64,6 +64,18 @@ move_chosen(2, Board, Type, NewBoard) :-
     move_piece(Board, Pos, Dir, Type, NewBoard), nl.
 
 move_chosen(3, Board, Type, NewBoard) :-
+    write('Select the position of the piece you want to move to eat:'), nl,
+    read(Pos),nl,
+    write('Choose the direction you will be eating:'), nl,
+    write('1. Down'), nl,
+    write('2. Up'), nl,
+    write('3. Right'), nl,
+    write('4. Left'), nl,
+    read(Dir),nl,
+    move_piece_to_eat(Board, Pos, Dir, Type, NewBoard), nl.
+
+
+move_chosen(4, Board, Type, NewBoard) :-
     write('Game over'), nl,
     break.
 
