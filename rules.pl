@@ -91,6 +91,7 @@ valid_move(Board, Pos, NewPos) :-
 jump((X,Y), (JX,JY), (DX,DY), (NewX,NewY)) :-
     NewX is X + 2*DX,
     NewY is Y + 2*DY,
+    write('T:'), write((NewX,NewY)), nl,
     JX is X + DX,
     JY is Y + DY.
 
@@ -218,17 +219,19 @@ type_human_move(Board, Color, Pos, NewPos, move):-
     valid_move(Board, Pos, NewPos).
 
 
-type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-  
+
+type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-  
     CapX is div(SX + NX, 2),
     CapY is div(SY + NY, 2),
-    chain_capture(Board, (SX, SY), [(CapX, CapY)], _, Color), !.
+    chain_capture(Board, (SX, SY), [(CapX, CapY)|_], _, Color), !.
 
 
-type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-
+
+type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-
     CapX is div(SX + NX, 2),
     CapY is div(SY + NY, 2),
-    write((CapX,CapY)),
-    chain_capture(Board, (SX, SY), [(CapX, CapY)|_], _, Color).
+    write((CapX, CapY)),
+    valid_jump(Board, (SX, SY), (CapX, CapY), (NX, NY), Color).
 
 
 
