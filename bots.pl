@@ -93,24 +93,25 @@ find_pieces(Board, Color, Pieces):-
     write('Pieces: '), write(Pieces), nl.
 
 
-allBestMoves(Board, Color, Moves):-
+allBestMoves(Board, Color, Bot, Moves):-
     find_pieces(Board, Color, Pieces),
-    allbestMovesAux(Board, Pieces, Color, Moves).
+    allbestMovesAux(Board, Pieces, Color, Bot, Moves).
 
-allbestMovesAux(_, [], _, []):- !.
+allbestMovesAux(_, [], _, _, []):- !.
 
-allbestMovesAux(Board, [X|T], Color, Moves):-
-    chooseMove(Board, X, Color, noobBot, Move),
-    allbestMovesAux(Board, T, Color, NewMoves),
-    append([Move], NewMoves, Moves).
+allbestMovesAux(Board, [X|T], Color, Bot, Moves):-
+    chooseMove(Board, X, Color, Bot, Move),
+    allbestMovesAux(Board, T, Color, Bot, NewMoves),
+    append([(X,Move)], NewMoves, Moves).
 
 %testBestMoves:-
 %    allBestMoves([
- %       [0,0,b,0,0,0],
-  %      [0,w,0,0,0,0],
-   %     [0,w,0,0,0,0],
-    %    [0,w,0,0,0,0],
-     %   [0,b,0,0,0,0]], b, Moves).
+%        [0,0,b,0,0,0],
+%        [0,w,0,0,0,0],
+%        [0,w,0,0,0,0],
+%        [0,w,0,0,0,0],
+%        [0,b,0,0,0,0]], b, proBot, Moves),
+%    write('Best Moves: '), write(Moves), nl.
 
 
 %choose_place/2
@@ -133,12 +134,4 @@ typeofMove(_, Move, jump):-
 typeofMove(_, Move, chain):-
     \+length(Move, 0),
      \+length(Move, 1).
-
-gamestate_example_4(
-    [
-    [empty,empty,black,empty,empty,empty],
-    [empty,white,empty,empty,empty,empty],
-    [empty,white,empty,empty,empty,empty],
-    [empty,white,empty,empty,empty,empty],
-    [empty,black,empty,empty,empty,empty]]).
 
