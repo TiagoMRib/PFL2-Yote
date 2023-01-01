@@ -31,7 +31,7 @@ play_game(Board, NumberWhitePieces, NumberBlackPieces, Color) :-
     write('Select 1 to place a piece, 2 to move a piece, 3 to eat a piece and 4 to quit.'), nl,
     read(Option), nl,
     move_chosen(Option, Board, NumberWhitePieces, NumberBlackPieces, Color, NewBoard, NewWhitePieces, NewBlackPieces),nl,
-    change_color(Color, NewColor),
+    opponent(Color, NewColor),
     play_game(NewBoard, NewWhitePieces, NewBlackPieces, NewColor).
     %repeat, % repeat the game until the player decides to stop
     %write('Current board:'), nl,
@@ -56,7 +56,12 @@ move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, New
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos),
+<<<<<<< Updated upstream
     place(Board, NewPos, Type, NewBoard),
+=======
+    empty(Board, NewPos),
+    place(Board, NewPos, white, NewBoard),
+>>>>>>> Stashed changes
     NewWhitePieces is NumberWhitePieces - 1, 
     NewBlackPieces is NumberBlackPieces.
 
@@ -74,17 +79,28 @@ move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, New
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos), 
+<<<<<<< Updated upstream
+=======
+    write('NewPos'), write(NewPos), nl
+    empty(Board, NewPos),
+>>>>>>> Stashed changes
     place(Board, NewPos, black, NewBoard),
     NewWhitePieces is NumberWhitePieces, 
     NewBlackPieces is NumberBlackPieces-1.
 
+<<<<<<< Updated upstream
 move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, NewWhitePieces, NewBlackPieces) :-
     NumberBlackPieces = 0, nl,
+=======
+
+move_chosen(1, Board, NumberWhitePieces, 0, black, NewBoard, NewWhitePieces, 0) :-nl,
+>>>>>>> Stashed changes
     write('You have no more pieces to place'), nl,
     NewBoard = Board,
     NewWhitePieces is NumberWhitePieces, 
     NewBlackPieces is NumberBlackPieces,
     play_game(NewBoard, NewWhitePieces, NewBlackPieces, black).
+
 
 move_chosen(2, Board, NumberWhitePieces, NumberBlackPieces, Type, NewBoard, NewWhitePieces, NewBlackPieces) :-
     write('Select the position of the piece you want to move:'), nl,

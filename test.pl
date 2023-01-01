@@ -9,15 +9,10 @@ teste(Result) :-
     print(NewerGameBoard).
 
 
-teste_empty(Result) :-
+teste_empty_out(Result) :-
     create_board(Board),
     print(Board),
-    empty(Board, (3,2)),
-    place(Board, (3,2), white, NewBoard),
-    print(NewBoard), nl,
-    empty(NewBoard, (3,2)),
-    place(NewBoard, (3,2), black, NewerBoard),
-    print(NewerBoard), nl.
+    empty(Board, (9,2)).
 
 teste_empty(Result) :-
     create_board(Board),

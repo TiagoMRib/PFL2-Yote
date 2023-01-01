@@ -4,41 +4,48 @@
 
 dynamic(nextPlayer/2).
 
-define_players(Human, Human):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(Human, Human)).
 
-define_players(Human, NoobBot):-
+define_players(human, human):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(Human, NoobBot)).
+    assert(nextPlayer(human, human)).
 
-define_players(Human, ProBot):-
+define_players(human, noobBot):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(Human, ProBot)).
+    assert(nextPlayer(human, noobBot)).
 
-define_players(NoobBot, Human):-
+define_players(human, proBot):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(NoobBot, Human)).
+    assert(nextPlayer(human, proBot)).
 
-define_players(NoobBot, NoobBot):-
+define_players(noobBot, human):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(NoobBot, NoobBot)).
+    assert(nextPlayer(noobBot, human)).
 
-define_players(NoobBot, ProBot):-
+define_players(noobBot, noobBot):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(NoobBot, ProBot)).
+    assert(nextPlayer(noobBot, noobBot)).
 
-define_players(ProBot, Human):-
+define_players(noobBot, proBot):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(ProBot, Human)).
+    assert(nextPlayer(noobBot, proBot)).
 
-define_players(ProBot, NoobBot):-
+define_players(proBot, human):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(ProBot, NoobBot)).
+    assert(nextPlayer(proBot, human)).
 
-define_players(ProBot, ProBot):-
+define_players(proBot, noobBot):-
     retract(nextPlayer(_, _)),
-    assert(nextPlayer(ProBot, ProBot)).
+    assert(nextPlayer(proBot, noobBot)).
+
+define_players(proBot, proBot):-
+    retract(nextPlayer(_, _)),
+    assert(nextPlayer(proBot, proBot)).
+
+
+type_of_player(1, human).
+type_of_player(2, noobBot).
+type_of_player(3, proBot).
+
 
 
 % HELPER
