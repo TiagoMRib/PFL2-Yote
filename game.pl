@@ -56,12 +56,9 @@ move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, New
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos),
-<<<<<<< Updated upstream
-    place(Board, NewPos, Type, NewBoard),
-=======
+
     empty(Board, NewPos),
     place(Board, NewPos, white, NewBoard),
->>>>>>> Stashed changes
     NewWhitePieces is NumberWhitePieces - 1, 
     NewBlackPieces is NumberBlackPieces.
 
@@ -79,22 +76,15 @@ move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, New
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos), 
-<<<<<<< Updated upstream
-=======
+
     write('NewPos'), write(NewPos), nl
     empty(Board, NewPos),
->>>>>>> Stashed changes
     place(Board, NewPos, black, NewBoard),
     NewWhitePieces is NumberWhitePieces, 
     NewBlackPieces is NumberBlackPieces-1.
 
-<<<<<<< Updated upstream
-move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, NewWhitePieces, NewBlackPieces) :-
-    NumberBlackPieces = 0, nl,
-=======
 
 move_chosen(1, Board, NumberWhitePieces, 0, black, NewBoard, NewWhitePieces, 0) :-nl,
->>>>>>> Stashed changes
     write('You have no more pieces to place'), nl,
     NewBoard = Board,
     NewWhitePieces is NumberWhitePieces, 
