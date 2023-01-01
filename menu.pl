@@ -1,4 +1,5 @@
 :- consult('tabuleiro.pl').
+:- consult('view.pl').
 
 % logo/0, prints the game logo.
 logo:-

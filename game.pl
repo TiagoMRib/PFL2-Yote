@@ -1,6 +1,7 @@
 :- consult('tabuleiro.pl').
 :- consult('rules.pl').
 :- consult('utils.pl').
+:- consult('menu.pl').
 
 start_game:- menu.
     %write('Welcome to the game of Yote'), nl,
@@ -56,17 +57,17 @@ move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, New
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos),
+    empty(Board, Pos),
     place(Board, NewPos, Type, NewBoard),
     NewWhitePieces is NumberWhitePieces - 1, 
     NewBlackPieces is NumberBlackPieces.
 
-move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, NewWhitePieces, NewBlackPieces) :-
-    NumberWhitePieces = 0, nl,
+move_chosen(1, Board, 0, NumberBlackPieces, white, NewBoard, 0, NewBlackPieces) :-
+    nl,
     write('You have no more pieces to place'), nl,
     NewBoard = Board,
-    NewWhitePieces is NumberWhitePieces, 
     NewBlackPieces is NumberBlackPieces,
-    play_game(NewBoard, NewWhitePieces, NewBlackPieces, white).
+    play_game(NewBoard, 0, NewBlackPieces, white).
 
 move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, NewWhitePieces, NewBlackPieces) :-
     NumberBlackPieces > 0, nl,
@@ -74,17 +75,20 @@ move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, New
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos), 
+    empty(Board, NewPos),
     place(Board, NewPos, black, NewBoard),
     NewWhitePieces is NumberWhitePieces, 
     NewBlackPieces is NumberBlackPieces-1.
 
-move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, NewWhitePieces, NewBlackPieces) :-
-    NumberBlackPieces = 0, nl,
+move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, Color, _, _, _) :-
+    write('Error placing!'), nl,
+    play_game(Board, NumberWhitePieces, NumberBlackPieces, Color).
+
+move_chosen(1, Board, NumberWhitePieces, 0, black, NewBoard, NewWhitePieces, 0) :-nl,
     write('You have no more pieces to place'), nl,
     NewBoard = Board,
-    NewWhitePieces is NumberWhitePieces, 
-    NewBlackPieces is NumberBlackPieces,
-    play_game(NewBoard, NewWhitePieces, NewBlackPieces, black).
+    NewWhitePieces is NumberWhitePieces,
+    play_game(NewBoard, NewWhitePieces, 0, black).
 
 move_chosen(2, Board, NumberWhitePieces, NumberBlackPieces, Type, NewBoard, NewWhitePieces, NewBlackPieces) :-
     write('Select the position of the piece you want to move:'), nl,

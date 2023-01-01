@@ -249,48 +249,68 @@ move_piece(Board, (X,Y), 1, Type, NewBoard):-
     %place(Board, (X,Y), 0, MidBoard), nl,
     change_board_element(Board, X, Y, 0, MidBoard),
     NewY is Y + 1,
+    valid_move(Board, (X,Y), (X,NewY)),
     place(MidBoard, (X,NewY), Type, NewBoard).
     %change_board_element(MidBoard, X, NewY, Type, NewBoard).
 
 move_piece(Board, (X,Y), 2, Type, NewBoard):-
     change_board_element(Board, X, Y, 0, MidBoard),
     NewY is Y - 1,
+    valid_move(Board, (X,Y), (X,NewY)),
     place(MidBoard, (X,NewY), Type, NewBoard).
 
 move_piece(Board, (X,Y), 3, Type, NewBoard):-
     change_board_element(Board, X, Y, 0, MidBoard),
     NewX is X + 1,
+    valid_move(Board, (X,Y), (NewX,Y)),
     place(MidBoard, (NewX,Y), Type, NewBoard).
 
 move_piece(Board, (X,Y), 4, Type, NewBoard):-
     change_board_element(Board, X, Y, 0, MidBoard),
     NewX is X - 1,
+    valid_move(Board, (X,Y), (NewX,Y)),
     place(MidBoard, (NewX,Y), Type, NewBoard).
 
 move_piece_to_eat(Board, (X,Y), 1, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
+    pos(Board, (X,Y), Simbol),
+    is_mine(Color, Simbol),
     NewY is Y + 1,
-    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
     FinalY is Y + 2,
+    valid_jump(Board, (X,Y), (X, NewY), (X, FinalY), Color),
+    change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
+
+    
     place(FinalBoard, (X,FinalY), Type, NewBoard).
 
 move_piece_to_eat(Board, (X,Y), 2, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
+    pos(Board, (X,Y), Simbol),
+    is_mine(Color, Simbol),
     NewY is Y - 1,
-    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
     FinalY is Y - 2,
+    valid_jump(Board, (X,Y), (X, NewY), (X, FinalY), Color),
+    change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
     place(FinalBoard, (X,FinalY), Type, NewBoard).
 
 move_piece_to_eat(Board, (X,Y), 3, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
+    pos(Board, (X,Y), Simbol),
+    is_mine(Color, Simbol),
+    valid_jump(Board, (X,Y), (NewX, Y), (FinalX, Y), Color),
     NewX is X + 1,
-    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
     FinalX is X + 2,
+    change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
+    
     place(FinalBoard, (FinalX,Y), Type, NewBoard).
 
 move_piece_to_eat(Board, (X,Y), 4, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
+    pos(Board, (X,Y), Simbol),
+    is_mine(Color, Simbol),
     NewX is X - 1,
-    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
     FinalX is X - 2,
+    valid_jump(Board, (X,Y), (NewX, Y), (FinalX, Y), Color),
+    change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
+    
     place(FinalBoard, (FinalX,Y), Type, NewBoard).
