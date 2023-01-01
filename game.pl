@@ -27,7 +27,7 @@ play_game(Board, NumberWhitePieces, NumberBlackPieces, Color) :-
     display_board(Board), nl,
     write('Current player: '), write(Color), nl,
     write('Number of white pieces left: '), write(NumberWhitePieces),nl,
-    write('NUmber of black pieces left: '), write(NumberBlackPieces),nl,
+    write('Number of black pieces left: '), write(NumberBlackPieces),nl,
     write('Select 1 to place a piece, 2 to move a piece, 3 to eat a piece and 4 to quit.'), nl,
     read(Option), nl,
     move_chosen(Option, Board, NumberWhitePieces, NumberBlackPieces, Color, NewBoard, NewWhitePieces, NewBlackPieces),nl,

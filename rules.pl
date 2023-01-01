@@ -169,7 +169,7 @@ valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
 
 
 valid_moves(Board, Pos, Result, Player) :-   
-    write('searching jumps'),
+    write('searching jumps'), nl,
     findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves),
     write('Moves:'), write(Moves), nl,
     write('going for the moves now'),

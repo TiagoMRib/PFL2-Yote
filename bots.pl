@@ -89,7 +89,29 @@ chooseMove(Board, Pos, Color, proBot, Move):-
 
 
 find_pieces(Board, Color, Pieces):-
-    findall(Result, pos(Board, Result, w), Pieces).
+    findall(Result, pos(Board, Result, Color), Pieces),
+    write('Pieces: '), write(Pieces), nl.
+
+
+allBestMoves(Board, Color, Moves):-
+    find_pieces(Board, Color, Pieces),
+    allbestMovesAux(Board, Pieces, Color, Moves).
+
+allbestMovesAux(_, [], _, []):- !.
+
+allbestMovesAux(Board, [X|T], Color, Moves):-
+    chooseMove(Board, X, Color, noobBot, Move),
+    allbestMovesAux(Board, T, Color, NewMoves),
+    append([Move], NewMoves, Moves).
+
+%testBestMoves:-
+%    allBestMoves([
+ %       [0,0,b,0,0,0],
+  %      [0,w,0,0,0,0],
+   %     [0,w,0,0,0,0],
+    %    [0,w,0,0,0,0],
+     %   [0,b,0,0,0,0]], b, Moves).
+
 
 %choose_place/2
 %chooses a random empty position to place a piece
@@ -112,5 +134,11 @@ typeofMove(_, Move, chain):-
     \+length(Move, 0),
      \+length(Move, 1).
 
-
+gamestate_example_4(
+    [
+    [empty,empty,black,empty,empty,empty],
+    [empty,white,empty,empty,empty,empty],
+    [empty,white,empty,empty,empty,empty],
+    [empty,white,empty,empty,empty,empty],
+    [empty,black,empty,empty,empty,empty]]).
 

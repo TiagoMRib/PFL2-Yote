@@ -133,16 +133,13 @@ gamestate_example_3([
 |black]).
 
 
-gamestate_example_4([
-[[empty,empty,empty,empty,empty,empty,empty,empty],
-[empty,empty,black,empty,empty,empty,empty,empty],
-[empty,white,empty,empty,empty,empty,empty,empty],
-[empty,white,empty,empty,empty,empty,empty,empty],
-[empty,white,empty,empty,empty,empty,empty,empty],
-[empty,black,empty,empty,empty,empty,empty,empty],
-[empty,empty,empty,empty,empty,empty,empty,empty],
-[empty,empty,empty,empty,empty,empty,empty,empty]]
-|black]).
+gamestate_example_4(
+[
+[empty,empty,black,empty,empty,empty],
+[empty,white,empty,empty,empty,empty],
+[empty,white,empty,empty,empty,empty],
+[empty,white,empty,empty,empty,empty],
+[empty,black,empty,empty,empty,empty]]).
 
 
 gamestate_example_5([
