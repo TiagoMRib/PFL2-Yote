@@ -1,5 +1,6 @@
 :- consult('tabuleiro.pl').
 :- consult('rules.pl').
+:- consult('utils.pl').
 
 start_game:- menu.
     %write('Welcome to the game of Yote'), nl,
@@ -21,15 +22,17 @@ start_game:- menu.
 play_game([[]|[]]) :-
     write('Its here'), nl.
 
-play_game(Board, Color) :-
+play_game(Board, NumberWhitePieces, NumberBlackPieces, Color) :-
     write('Current board:'), nl,
     display_board(Board), nl,
     write('Current player: '), write(Color), nl,
+    write('Number of white pieces left: '), write(NumberWhitePieces),nl,
+    write('NUmber of black pieces left: '), write(NumberBlackPieces),nl,
     write('Select 1 to place a piece, 2 to move a piece, 3 to eat a piece and 4 to quit.'), nl,
-    read(Option),nl,
-    move_chosen(Option, Board, Color, NewBoard),nl,
+    read(Option), nl,
+    move_chosen(Option, Board, NumberWhitePieces, NumberBlackPieces, Color, NewBoard, NewWhitePieces, NewBlackPieces),nl,
     change_color(Color, NewColor),
-    play_game(NewBoard, NewColor).
+    play_game(NewBoard, NewWhitePieces, NewBlackPieces, NewColor).
     %repeat, % repeat the game until the player decides to stop
     %write('Current board:'), nl,
     %print_board(Board), % print the current board
@@ -47,37 +50,80 @@ play_game(Board, Color) :-
     %)
     %).
 
-move_chosen(1, Board, Type, NewBoard) :-
-    write('Select the position you want to place the piece:'), nl,
-    read(Pos),
-    place(Board, Pos, Type, NewBoard).
+move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, NewWhitePieces, NewBlackPieces) :-
+    NumberWhitePieces > 0, nl,
+    write('Select the position you want to place the white piece:'), nl,
+    read(Pos), nl,
+    atom_chars(Pos, InputList),
+    convert_letter_to_number(InputList,NewPos),
+    place(Board, NewPos, Type, NewBoard),
+    NewWhitePieces is NumberWhitePieces - 1, 
+    NewBlackPieces is NumberBlackPieces.
 
-move_chosen(2, Board, Type, NewBoard) :-
+move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, NewWhitePieces, NewBlackPieces) :-
+    NumberWhitePieces = 0, nl,
+    write('You have no more pieces to place'), nl,
+    NewBoard = Board,
+    NewWhitePieces is NumberWhitePieces, 
+    NewBlackPieces is NumberBlackPieces,
+    play_game(NewBoard, NewWhitePieces, NewBlackPieces, white).
+
+move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, NewWhitePieces, NewBlackPieces) :-
+    NumberBlackPieces > 0, nl,
+    write('Select the position you want to place the piece:'), nl,
+    read(Pos), nl,
+    atom_chars(Pos, InputList),
+    convert_letter_to_number(InputList,NewPos), 
+    place(Board, NewPos, black, NewBoard),
+    NewWhitePieces is NumberWhitePieces, 
+    NewBlackPieces is NumberBlackPieces-1.
+
+move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, black, NewBoard, NewWhitePieces, NewBlackPieces) :-
+    NumberBlackPieces = 0, nl,
+    write('You have no more pieces to place'), nl,
+    NewBoard = Board,
+    NewWhitePieces is NumberWhitePieces, 
+    NewBlackPieces is NumberBlackPieces,
+    play_game(NewBoard, NewWhitePieces, NewBlackPieces, black).
+
+move_chosen(2, Board, NumberWhitePieces, NumberBlackPieces, Type, NewBoard, NewWhitePieces, NewBlackPieces) :-
     write('Select the position of the piece you want to move:'), nl,
     read(Pos),nl,
+    atom_chars(Pos, InputList),
+    convert_letter_to_number(InputList,NewPos), 
     write('Choose a direction to move to:'), nl,
     write('1. Down'), nl,
     write('2. Up'), nl,
     write('3. Right'), nl,
     write('4. Left'), nl,
     read(Dir),nl,
-    move_piece(Board, Pos, Dir, Type, NewBoard), nl.
+    move_piece(Board, NewPos, Dir, Type, NewBoard), nl,
+    NewWhitePieces is NumberWhitePieces, 
+    NewBlackPieces is NumberBlackPieces.
 
-move_chosen(3, Board, Type, NewBoard) :-
+move_chosen(3, Board, NumberWhitePieces, NumberBlackPieces, Type, NewBoard, NewWhitePieces, NewBlackPieces) :-
     write('Select the position of the piece you want to move to eat:'), nl,
     read(Pos),nl,
+    atom_chars(Pos, InputList),
+    convert_letter_to_number(InputList,NewPos), 
     write('Choose the direction you will be eating:'), nl,
     write('1. Down'), nl,
     write('2. Up'), nl,
     write('3. Right'), nl,
     write('4. Left'), nl,
     read(Dir),nl,
-    move_piece_to_eat(Board, Pos, Dir, Type, NewBoard), nl.
+    move_piece_to_eat(Board, NewPos, Dir, Type, NewBoard), nl,
+    NewWhitePieces is NumberWhitePieces, 
+    NewBlackPieces is NumberBlackPieces.
 
 
-move_chosen(4, Board, Type, NewBoard) :-
+move_chosen(4, Board, NumberWhitePieces, NumberBlackPieces, Type, NewBoard, NewWhitePieces, NewBlackPieces) :-
     write('Game over'), nl,
     break.
+
+convert_letter_to_number([X,Y], (NewX,NewY)):-
+    numberLetter(NewX,X),
+    numberLetter(NewY,Y).
 
 change_color(white, black).
 change_color(black, white).

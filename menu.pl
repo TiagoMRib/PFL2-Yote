@@ -48,9 +48,11 @@ menu_option(1):-
     create_board(GameBoard), nl,
     %set_pieces(white, 12),
     %set_pieces(black, 12),
+    NumberWhitePieces = 12,
+    NumberBlackPieces = 12,
     Type = white,
     %Human = true,
-    play_game(GameBoard, Type).
+    play_game(GameBoard, NumberWhitePieces, NumberBlackPieces, Type).
     %play_game(GameBoard,Color,Human).
 
 menu_option(2):-
