@@ -27,14 +27,7 @@ option(Option, Details):-
   % menu/0 presents a user friendly menu for game options.
 menu:-
   logo,
-  menu_formater('MENU'),
-  option(1, 'Player x Player'),
-  option(2, 'Player x Computer'),
-  option(3, 'Intructions'),
-  option(0, 'Exit'),
-  write('******************************'),nl,
-  read(Number),
-  menu_option(Number).
+  initialization.
 
 % menu_option(+Option)
 % Sub-Menus related to option selected on the main menu
@@ -46,8 +39,6 @@ menu_option(0):-
 
 menu_option(1):-
     create_board(GameBoard), nl,
-    %set_pieces(white, 12),
-    %set_pieces(black, 12),
     NumberWhitePieces = 12,
     NumberBlackPieces = 12,
     Type = white,

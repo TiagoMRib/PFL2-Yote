@@ -22,9 +22,18 @@ enemy(Board,(X,Y),Player):-
 	opponent(Player, Owner), !.
 
 
+% Define the predicate delete_pos/3, which takes three arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the position of the piece to be deleted (represented as a pair of integers)
+%   - NewBoard: the new state of the board (represented as a list of lists of simbols)
 delete_pos(Board, (X,Y), NewBoard):-
     change_board_element(Board, X, Y, 0, NewBoard).
 
+% Define the predicate set_pos/4, which takes four arguments:
+%   - Board: the current state of the board (represented as a list of lists of simbols)
+%   - Pos: the position of the piece to be set (represented as a pair of integers)
+%   - Simbol: the simbol to be set in Pos
+%   - NewBoard: the new state of the board (represented as a list of lists of simbols)
 set_pos(Board, (X,Y), Simbol, NewBoard):-
     change_board_element(Board, X, Y, Simbol, NewBoard).
 
@@ -193,25 +202,30 @@ chain_capture(Board, Pos, [], _, _) :- % base case: single jump that cannot be c
 
 
 
+% Define the predicate valid_chains/4, which takes four arguments:
+%   - Board: the current state of the board (represented as a list of lists of integers)
+%   - Pos: the current position of the piece (represented as a pair of integers)
+%   - Captures: the list of positions of the pieces captured in the chain capture
+%   - Player: the player
 valid_chains(Board, Pos, Captures, Player) :-
     write('Entering'), nl,
    findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures),
    write(Captures).
 
 
-
-% UNFINISHED
+% Define the predicate type_human_move/5, which takes five arguments:
+%   - Board: the current state of the board (represented as a list of lists of integers)
+%   - Color: the color of the player (represented as an integer)
+%   - Pos: the current position of the piece (represented as a pair of integers)
+%   - NewPos: the new position of the piece after making the move
+%   - Type of movement: the type of movement the piece took
 type_human_move(Board, Color, Pos, NewPos, move):-  
     valid_move(Board, Pos, NewPos).
-
-
 
 type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-  
     CapX is div(SX + NX, 2),
     CapY is div(SY + NY, 2),
     chain_capture(Board, (SX, SY), [(CapX, CapY)|_], _, Color), !.
-
-
 
 type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-
     CapX is div(SX + NX, 2),
@@ -219,13 +233,12 @@ type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-
     write((CapX, CapY)),
     valid_jump(Board, (SX, SY), (CapX, CapY), (NX, NY), Color).
 
-
-
-
-
-
-
-
+% Define the predicate move_piece/5, which takes five arguments:
+%   - Board: the current state of the board (represented as a list of lists of integers)
+%   - Pos: the current position of the piece (represented as a pair of integers)
+%   - Dir: the direction intended for the piece (represented as a pair of integers)
+%   - Type of movement: the type of movement the piece took
+%   - NewBoard: the new state of the board after making the move
 move_piece(Board, (X,Y), 1, Type, NewBoard):-
     NewY is Y + 1,
     empty(Board, (X,NewY)),

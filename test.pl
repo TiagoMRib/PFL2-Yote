@@ -2,6 +2,7 @@
 :- consult('bots.pl').
 :- consult('alt_game.pl').
 
+% Tests the creation of the board, the printing of the board and the change of the board
 teste(Result) :-
     create_board(GameBoard),
     change_board_element(GameBoard, 2, 2, w, NewGameBoard),
@@ -9,7 +10,7 @@ teste(Result) :-
     change_board_element(NewGameBoard, 4, 2, b, NewerGameBoard),
     print(NewerGameBoard).
 
-
+% Tests emptying a position
 teste_empty_out(Result) :-
     create_board(Board),
     print(Board),
@@ -37,7 +38,6 @@ verify(Result) :-
     empty(Board, (3,2)).
 
 
-
 teste_valid(Result) :-
     create_board(Board),
     print(Board),
@@ -58,8 +58,6 @@ teste_chain(Moves) :-
     chain_capture(Board, (3,3), Moves, NewPos, white),
     write(Moves),
     write(NewPos).
-
-
 
 
 teste_sensor(Results):-

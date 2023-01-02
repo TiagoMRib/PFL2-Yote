@@ -1,14 +1,19 @@
 :- use_module(library(lists)).
 
+% Define the predicate create_board/1, which takes one argument:
+%   - Board: the initial state of the board (represented as a list of lists of simbols)
 create_board(GameBoard):-
     create_empty_board(5, 6, GameBoard).
 
-% creates and returns the empty side of the board
+% Define the predicate create_empty_board/3, which takes three arguments:
+%   - Rows: the number of rows of the board
+%   - Columns: the number of columns of the board
+%   - Board: the initial state of the board (represented as a list of lists of simbols)
 create_empty_board(Rows, Columns, Result):-
     create_row(Columns, 0, EmptyRow),
     aux_create_empty_board(Rows, EmptyRow, [], Result).
 
-% auxiliar function that creates and returns the empty side of the board
+
 aux_create_empty_board(Size, EmptyRow, CurrentBoard, Result):-
     Size =:= 1,
     append(CurrentBoard, [EmptyRow], Result).
@@ -19,7 +24,10 @@ aux_create_empty_board(Size, EmptyRow, CurrentBoard, Result):-
     NewSize is Size - 1,
     aux_create_empty_board(NewSize, EmptyRow, NewBoard, Result).
 
-% creates and returns a row with <Size> elements of a fiven <Type>
+% Define the predicate create_row/3, which takes three arguments:
+%   - Size: the number of elements of the row
+%   - Type: the type of the elements of the row
+%   - Row: the row (represented as a list of simbols)
 create_row(Size, Type, Result):-
     aux_create_row(Size, Type, [], Result).
 
@@ -39,7 +47,12 @@ aux_create_row(Size, Type, CurrentRow, Result):-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    Changes an element on the board   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-% changes an element on the board given by the position <Row> and <Col>, and change it to the element <NewElement>
+% Define the predicate change_board_element/5, which takes five arguments:
+%   - GameBoard: the current state of the board (represented as a list of lists of simbols)
+%   - Row: the row of the element to be changed
+%   - Col: the column of the element to be changed
+%   - NewElement: the new element to be placed on the board
+%   - NewGameBoard: the new state of the board (represented as a list of lists of simbols)
 change_board_element(GameBoard, Row, Col, NewElement, NewGameBoard):-
     aux_change_board_element(GameBoard, 1, Col, Row, NewElement, [], NewGameBoard).  % Tava trocado o Row e o Col na lógica
 
@@ -61,7 +74,12 @@ aux_change_board_element([Row|Rest], CurrentRowNum, RowNum, ColNum, NewElement, 
     append(SavedBoard, [NewRow], NewSavedBoard),
     aux_change_board_element(Rest, NewRowNum, RowNum, ColNum, NewElement, NewSavedBoard, NewGameBoard).
 
-% changes an element on the row given by the position <ColumnNum>, and change it to the element <NewElement>
+
+% Define the predicate change_row_element/5, which takes five arguments:
+%   - Row: the row of the element to be changed
+%   - ColumnNum: the column of the element to be changed
+%   - NewElement: the new element to be placed on the board
+%   - NewRow: the new row (represented as a list of simbols)
 change_row_element(Row, ColumnNum, NewElement, NewRow):-
     aux_change_row_element(Row, 1, ColumnNum, NewElement, [], NewRow).
 
