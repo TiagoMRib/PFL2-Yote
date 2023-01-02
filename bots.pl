@@ -105,7 +105,7 @@ chooseMove(Board, Pos, Color, noobBot, Move):-
     write('Moves available for Noob:'), write(Moves), nl,
     \+length(Moves, 0),
     random_member(Move, Moves),
-    write('he chooses:'), write(Move), nl, nl.
+    write('he chooses:'), write(Move), nl.
 
 
 
@@ -117,7 +117,7 @@ chooseMove(Board, Pos, Color, proBot, Move):-
     head_of_list(Captures, Head),
     \+length(Head, 0),
     longest_list(Captures, Move),
-    write('he chooses:'), write(Move), nl, nl)).
+    write('he chooses:'), write(Move), nl)).
 
 
 chooseMove(Board, Pos, Color, proBot, Move):- 
@@ -126,7 +126,7 @@ chooseMove(Board, Pos, Color, proBot, Move):-
     valid_moves(Board, Pos, [Move| Tail], Color),
     write('Moves available for Pro:'), write([Move|Tail]), nl,
     \+length([Move| Tail], 0),
-    write('he chooses:'), write(Move), nl, nl.
+    write('he chooses:'), write(Move), nl.
 
 
 find_pieces(Board, Color, Pieces):-
@@ -230,7 +230,7 @@ execute_move(((StartX, StartY), [(CapX, CapY) | Tail]), Board, NewBoard):-
     change_board_element(Board, CapX, CapY, 0, MidBoard),
     change_board_element(MidBoard, StartX, StartY, 0, FinalBoard),
     place(FinalBoard, (FinalX,FinalY), Color, PrintBoard),
-    display_board(PrintBoard),
+    display_board(PrintBoard), nl,
     execute_move((FinalX, FinalY), Tail, PrintBoard, NewBoard).
 
 
