@@ -86,10 +86,12 @@ teste_inteligence(Result):-
 
 teste_bots(_) :-
     capture_Board(Board),
-    chooseMove(Board, (X,Y), white, noobBot, Move),
+    chooseMove(Board, (3,3), white, noobBot, Move),
     write('Idiot:'),write(Move),nl,
-    chooseMove(Board, (X,Y), white, proBot, OtherMove),
-    write('Smart:'),write(OtherMove),nl.
+    chooseMove(Board, (3,3), white, proBot, OtherMove),
+    write('Smart:'),write(OtherMove),nl,
+    allBestMoves(Board, w, proBot, Moves),
+    write('Best Moves: '), write(Moves), nl.
 
 
 teste_smartbot(_):-
@@ -98,6 +100,15 @@ teste_smartbot(_):-
     write('Smart:'),write(OtherMove),nl,
     typeofMove(OtherMove, Type),
     write(Type), nl.
+
+testBestMoves:-
+    allBestMoves([
+        [0,0,b,0,0,0],
+        [0,w,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,w,0,0,0,0],
+        [0,b,0,0,0,0]], b, proBot, Moves),
+    write('Best Moves: '), write(Moves), nl.
 
 
 
