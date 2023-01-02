@@ -83,6 +83,132 @@ game_over(Board, Player, black):-
     n_pieces(black, Nblack),
     Nwhite < Nblack.
 
+%%%%%%%%%%% CASE NO PIECES/MOVES
+play_game(Board, Bot, Color) :-
+    is_bot(Bot),
+    repeat,
+    display_board(Board),
+    n_pieces(white, Nwhite),
+    n_pieces(black, Nblack),
+    write('Number of white pieces left: '), write(Nwhite),nl,
+    write('Number of black pieces left: '), write(Nblack),nl,
+    write('Your turn: '), write(Color), nl, 
+    
+    %%%%%%%%%%%%%%%%  robot actions
+
+    find_pieces(Board, Color, Pieces),
+
+    write('Pieces Found (sec):'), write(Pieces), nl, 
+
+    length(Pieces, 0),
+
+    choose_place(Board, Pos),
+
+    place(Board, Pos, Color, NewBoard),
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    nextPlayer(Bot, OtherPlayer), 
+    opponent(Color, NextColor),
+    (   game_over(NewBoard, OtherPlayer, Result)
+     ->  (   Result = white
+         ->  write('Game over! White wins!'), nl
+         ;   Result = black
+         ->  write('Game over! Black wins!'), nl
+         ;   Result = draw
+         ->  write('Draw'), nl
+
+        )
+     ;   play_game(NewBoard, OtherPlayer, NextColor)
+    ).
+
+
+play_game(Board, Bot, Color) :-
+    is_bot(Bot),
+    repeat,
+    display_board(Board),
+    n_pieces(white, Nwhite),
+    n_pieces(black, Nblack),
+    write('Number of white pieces left: '), write(Nwhite),nl,
+    write('Number of black pieces left: '), write(Nblack),nl,
+    write('Your turn: '), write(Color), nl, 
+    
+    %%%%%%%%%%%%%%%%  robot actions
+
+    find_pieces(Board, Color, Pieces),
+
+    write('Pieces Found (first):'), write(Pieces), nl, 
+
+    \+length(Pieces, 0),
+
+    allBestMoves(Board, Color, Bot, Moves),
+    \+length(Moves, 0),
+    higher_value(Moves, Result),
+
+    execute_move(Color, Result, Board, NewBoard),
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    nextPlayer(Bot, OtherPlayer), 
+    opponent(Color, NextColor),
+    (   game_over(NewBoard, OtherPlayer, Result)
+     ->  (   Result = white
+         ->  write('Game over! White wins!'), nl
+         ;   Result = black
+         ->  write('Game over! Black wins!'), nl
+         ;   Result = draw
+         ->  write('Draw'), nl
+
+        )
+     ;   play_game(NewBoard, OtherPlayer, NextColor)
+    ).
+
+
+
+%%%%%%%%%%% CASE NO MOVES
+play_game(Board, Bot, Color) :-
+    is_bot(Bot),
+    repeat,
+    display_board(Board),
+    n_pieces(white, Nwhite),
+    n_pieces(black, Nblack),
+    write('Number of white pieces left: '), write(Nwhite),nl,
+    write('Number of black pieces left: '), write(Nblack),nl,
+    write('Your turn: '), write(Color), nl, 
+    
+    %%%%%%%%%%%%%%%%  robot actions
+
+    find_pieces(Board, Color, Pieces),
+
+    write('Pieces Found (thris):'), write(Pieces), nl, 
+
+    \+length(Pieces, 0),
+    
+    allBestMoves(Board, Color, Bot, Moves),
+    length(Moves, 0),
+
+    choose_place(Board, Pos),
+
+    place(Board, Pos, Color, NewBoard),
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    nextPlayer(Bot, OtherPlayer), 
+    opponent(Color, NextColor),
+    (   game_over(NewBoard, OtherPlayer, Result)
+     ->  (   Result = white
+         ->  write('Game over! White wins!'), nl
+         ;   Result = black
+         ->  write('Game over! Black wins!'), nl
+         ;   Result = draw
+         ->  write('Draw'), nl
+
+        )
+     ;   play_game(NewBoard, OtherPlayer, NextColor)
+    ).
+
+
 play_game(Board, human, Color) :-
     repeat,
     display_board(Board),

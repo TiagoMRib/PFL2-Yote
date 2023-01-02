@@ -1,6 +1,9 @@
 
 :- use_module(library(lists)).
 :- use_module(library(random)).
+:- consult('tabuleiro.pl').
+:- consult('rules.pl').
+
 
 dynamic(nextPlayer/2).
 
@@ -73,6 +76,9 @@ type_of_player(1, human).
 type_of_player(2, noobBot).
 type_of_player(3, proBot).
 
+is_bot(noobBot).
+is_bot(proBot).
+
 
 
 % HELPER
@@ -115,9 +121,10 @@ chooseMove(Board, Pos, Color, proBot, Move):-
 
 
 chooseMove(Board, Pos, Color, proBot, Move):- 
-    write('Entred here'),
+    write('Entred here'), nl,
+    write('The Pos'), write(Pos), nl,
     valid_moves(Board, Pos, [Move| Tail], Color),
-    write('Moves available for Pro:'), write(Captures), nl,
+    write('Moves available for Pro:'), write([Move|Tail]), nl,
     \+length([Move| Tail], 0),
     write('he chooses:'), write(Move), nl, nl.
 
@@ -129,43 +136,108 @@ find_pieces(Board, Color, Pieces):-
 
 allBestMoves(Board, Color, Bot, Moves):-
     find_pieces(Board, Color, Pieces),
+    write('The Pices:'), write(Pieces), nl,
     allbestMovesAux(Board, Pieces, Color, Bot, Moves).
 
-allbestMovesAux(_, [], _, _, []):- !.
+allbestMovesAux(_, [], _, _, []):- write('Base case'), nl,!.
 
-allbestMovesAux(Board, [X|T], Color, Bot, Moves):-
+allbestMovesAux(Board, [X|T], Simbol, Bot, Moves):-
+    write('X'), write(X), nl,
+    write('T'), write(T), nl,
+    is_mine(Color, Simbol),
     chooseMove(Board, X, Color, Bot, Move),
-    allbestMovesAux(Board, T, Color, Bot, NewMoves),
-    append([(X,Move)], NewMoves, Moves).
+    allbestMovesAux(Board, T, Simbol, Bot, NewMoves),
+    write('NewMoves'), nl,
+    append([(X,Move)], NewMoves, Moves),
+    write('Moves'), nl.
 
-%testBestMoves:-
-%    allBestMoves([
-%        [0,0,b,0,0,0],
-%        [0,w,0,0,0,0],
-%        [0,w,0,0,0,0],
-%        [0,w,0,0,0,0],
-%        [0,b,0,0,0,0]], b, proBot, Moves),
-%    write('Best Moves: '), write(Moves), nl.
+
 
 
 %choose_place/2
 %chooses a random empty position to place a piece
+% to be called if allvestMoves returns []
 choose_place(Board, Pos):-
     findall(Pos, empty(Board, Pos), Empties),
     random_member(Pos, Empties).
 
 
-typeofMove(Board, (X,Y), jump):-
-    \+empty(Board, (X,Y)).
+typeofMove((_,(X,Y)), 1). %move
 
-typeofMove(Board, (X,Y), move):-
-    empty(Board, (X,Y)).
+typeofMove((_,[X]), 2). %jump
 
-typeofMove(_, Move, jump):-
-    length(Move, 1).
+typeofMove((_, [X1, X2 | Tail]), Value):-  %chain
+    length([X1, X2 | Tail], Len),
+    Value is Len + 1.
 
 
-typeofMove(_, Move, chain):-
-    \+length(Move, 0),
-     \+length(Move, 1).
+
+
+
+higher_value([], CurrentLargest, Result):-
+    write('Base Case'), nl,
+    write(CurrentLargest), nl,
+    typeofMove(CurrentLargest, Result),
+    
+    write(Result), nl.
+
+higher_value([(Pos, Move) | Tail], CurrentLargest, Result):-
+    write('The Move:'), write((Pos, Move)),nl,
+    typeofMove((Pos, Move), Score),
+    write('Score:'), write(Score), nl,
+    typeofMove(CurrentLargest, Record),
+    write('Record:'), write(Record), nl,
+    Score > Record,
+    higher_value(Tail, (Pos, Move), Result).
+
+higher_value([(Pos, Move) | Tail], CurrentLargest, Result):-
+    typeofMove((Pos, Move), Score),
+    typeofMove(CurrentLargest, Record),
+    Score =< Record,
+    higher_value(Tail, CurrentLargest, Result).
+
+
+higher_value([(Pos, Move) | Tail], Result):-
+    write('Started: '), write((Pos, Move)), nl,
+    higher_value(Tail, (Pos, Move), Result).
+
+
+type(0, place).
+type(1, move).
+type(2, jump).
+type(Number, chain):- Number >= 2.
+
+
+execute_move(Color, ((StartX, StartY), (NextX, NextY)), Board, NewBoard):-
+    change_board_element(Board, StartX, StartY, 0, MidBoard),
+    place(MidBoard, (NextX, NextY), Color, NewBoard).
+
+execute_move(Color, ((StartX, StartY), [(CapX, CapY)]), Board, NewBoard):-
+    DifX is CapX - StartX,
+    FinalX is CapX + DifX,
+    DifY is CapY - StartY,
+    FinalY is CapY + DifY,
+    change_board_element(Board, CapX, CapY, 0, MidBoard),
+    change_board_element(MidBoard, StartX, StartY, 0, FinalBoard),
+    place(FinalBoard, (FinalX,FinalY), Color, NewBoard).
+
+
+execute_move(((StartX, StartY), [(CapX, CapY) | Tail]), Board, NewBoard):-
+    DifX is CapX - StartX,
+    FinalX is CapX + DifX,
+    DifY is CapY - StartY,
+    FinalY is CapY + DifY,
+    change_board_element(Board, CapX, CapY, 0, MidBoard),
+    change_board_element(MidBoard, StartX, StartY, 0, FinalBoard),
+    place(FinalBoard, (FinalX,FinalY), Color, PrintBoard),
+    display_board(PrintBoard),
+    execute_move((FinalX, FinalY), Tail, PrintBoard, NewBoard).
+
+
+
+
+
+
+
+
 

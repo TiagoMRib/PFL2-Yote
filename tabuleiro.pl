@@ -86,7 +86,6 @@ aux_change_row_element([_|Rest], CurrentCol, ColNum, NewElement, SavedRow, NewRo
 %   - Board: the current state of the board (represented as a list of lists of simbols)
 %   - Pos: the position of the piece to be evaluated (represented as a pair of integers)
 empty(Board, (X,Y)):-
-    write('Checking if element at coordinates ('), write(X), write(', '), write(Y), write(') is empty...'), nl,
     nth1(Y, Board, Row),
     nth1(X, Row, 0).
 

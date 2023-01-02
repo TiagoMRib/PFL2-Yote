@@ -59,11 +59,7 @@ teste_chain(Moves) :-
     write(Moves),
     write(NewPos).
 
-capture_Board([[0,0,0,0,0,0],
-               [0,0,b,0,b,w],
-               [0,b,w,0,0,b],
-               [b,0,0,0,b,0],
-               [0,0,0,0,0,0]]).
+
 
 
 teste_sensor(Results):-
@@ -84,7 +80,13 @@ teste_inteligence(Result):-
     intelligence(Board, white, noobBot, Result).
 
 
-teste_bots(_) :-
+capture_Board([[0,0,0,0,0,0],
+               [0,0,b,0,b,w],
+               [0,b,w,0,0,b],
+               [b,0,0,0,b,0],
+               [0,0,0,w,0,0]]).
+
+teste_bots:-
     capture_Board(Board),
     chooseMove(Board, (3,3), white, noobBot, Move),
     write('Idiot:'),write(Move),nl,
@@ -101,14 +103,16 @@ teste_smartbot(_):-
     typeofMove(OtherMove, Type),
     write(Type), nl.
 
-testBestMoves:-
-    allBestMoves([
-        [0,0,b,0,0,0],
-        [0,w,0,0,0,0],
-        [0,0,0,0,0,0],
-        [0,w,0,0,0,0],
-        [0,b,0,0,0,0]], b, proBot, Moves),
-    write('Best Moves: '), write(Moves), nl.
+testBestMoves :-
+    capture_Board(Board),
+    allBestMoves(Board, w, proBot, Moves),
+    write('Best Moves: '), write(Moves), nl,
+
+    write('Previous part over'), nl, nl, nl, nl,
+    higher_value(Moves, Result),
+    write('Result:'), write(Result), nl.
+
+testBestMoves. % remove this line
 
 
 
