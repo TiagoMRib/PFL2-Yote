@@ -57,8 +57,6 @@ The **game state** is composed of the **current state for the board**, the **col
 [0,0,0,0,0,0]], 12, 12, w
 ```
 
-![Initial State](./img/initialState.png)
-
 #### Intermediate state (11x11)
 
 ```
@@ -68,8 +66,6 @@ The **game state** is composed of the **current state for the board**, the **col
 [0,w,0,0,0,0],
 [0,b,0,0,0,0]], 9, 8, w
 ```
-
-![Intermediate State](./img/intermediateState.png)
 
 #### Final state (11x11)
 
@@ -82,15 +78,11 @@ The **game state** is composed of the **current state for the board**, the **col
 [0,0,0,0,0,0]], 2, 0, w
 ```
 
-![Final State](./img/finalState.png)
-
 ### Game state visualization
 
 The predicates for the game visualization are separated into two different modules: `menu` and `game`, representing the menu and game state's interaction and display:
 
 - The `menu` module has a few helper predicates meant to reutilize the code and ease the creation of new menu sections. The main menu predicates are created using **menu/0** and **menu_option/1** ( *menu.pl* ).
-
-![](./img/menu.png)
 
 - The `game` module has the main predicates **play_game/4** and **move_chosen/8**. All the user interactions are validated (either in the I/O or move execution predicates) and inform the players of possible errors before asking for another input.
 
@@ -99,8 +91,6 @@ The predicates for the game visualization are separated into two different modul
         displayBoard(+Board)
 
     It uses other support predicates like **display_first_row_cells/1**, which displays the columns header, and **display_middle_row_cells/1**, whichs prints a line of the board.
-
-![](./img/game.png)
 
 ### Move execution
 
@@ -116,7 +106,11 @@ The first move is applied with **place/4**. The second with **move/5** and the t
     
 ### Game Over
 
+The strategy for checking if the game ended was to create the predicate **game_over/2**.
 
+    game_over(+Board, +Player, -Color)
+
+Since the game has four ways to end the game, the predicate gameOver/2 needed to have a rule for each win condition.
 
 ### List of valid moves:
 
@@ -128,8 +122,14 @@ Using **findall** we are able to find all valid moves a player can make on a giv
 
 ### Game state evaluation
 
+To evaluate the state of the game the predicate **chain_capture/5** verifies if there's any multiple capture available.
+
+    chain_capture(+Board, +Pos, +[Capture|Rest], -NewPos, -Player)
+    
+The predicate will succeed if the game has ended.
 
 ### Computer move
+
 
 
 ## Conclusion
