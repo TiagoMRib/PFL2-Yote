@@ -21,7 +21,7 @@ retract_pieces(Color):-
     NewNumber is Number - 1,
     assert(n_pieces(Color, NewNumber)).
 
-start_game:- menu.
+play:- menu.
 
 % initialize the game 
 initialization:-
@@ -40,13 +40,13 @@ initialization:-
     write('1-Human'), nl,
     write('2-Easy Bot'), nl,
     write('3-Intelligent Bot'), nl,
-    read(Option1),
+    read(Option1), nl,
     type_of_player(Option1, Player1),
     write('Player 2 (black):'), nl,
     write('1-Human'), nl,
     write('2-Easy Bot'), nl,
     write('3-Intelligent Bot'), nl,
-    read(Option2),
+    read(Option2), nl,
     type_of_player(Option2, Player2),
     define_players(Player1, Player2),
 
@@ -55,37 +55,57 @@ initialization:-
 % game_over(-Board, -Player, ?Result)
 %
 %
-game_over(Board, Player, draw):-
-    n_pieces(white, Nwhite),
-    n_pieces(black, Nblack),
-    Nwhite =< 3,
-    Nblack =< 3.
+
+
+total_pieces(Board, NWhite, NBlack):-
+    findall(Simbol, pos(Board, _, w), Placed), 
+    length(Placed, NWPlaced),
+
+    findall(Simbol, pos(Board, _, b), Placed), 
+    length(Placed, NBPlaced),
+
+    n_pieces(white, NUnwhite),
+    n_pieces(black, NUnblack),
+
+    NWhite is NWPlaced + NUnwhite,
+    NBlack is NBPlaced + NUnblack.
+
 
 game_over(Board, Player, draw):-
 
-    % put here the thing that checks all moves
-    fail,
-    n_pieces(white, Nwhite),
-    n_pieces(black, Nblack),
-    Nwhite =:= Nblack.
+    total_pieces(Board, NWhite, NBlack),
+    
+    NWhite =< 3,
+    NBlack =< 3.
+
+game_over(Board, Player, draw):-
+
+    n_pieces(Player, 0),
+    is_mine(Player, Simbol),
+    allBestMoves(Board, Simbol, noobBot, Moves),
+    length(Moves, 0),
+    total_pieces(Board, NWhite, NBlack),
+    NWhite =:= NBlack.
 
 game_over(Board, Player, white):-
-
-    % put here the thing that checks all moves
-    % for now 
-    fail,
-    %for now
-    n_pieces(white, Nwhite),
-    n_pieces(black, Nblack),
-    Nwhite > Nblack.
+    n_pieces(Player, 0),
+    is_mine(Player, Simbol),
+    allBestMoves(Board, Simbol, noobBot, Moves),
+    length(Moves, 0),
+    
+    total_pieces(Board, NWhite, NBlack),
+    NWhite > NBlack.
 
 game_over(Board, Player, black):-
+    
+    n_pieces(black, 0),
+    is_mine(Player, Simbol),
+    allBestMoves(Board, Simbol, noobBot, Moves),
+    length(Moves, 0),
 
-    % put here the thing that checks all moves
-    fail,
-    n_pieces(white, Nwhite),
-    n_pieces(black, Nblack),
-    Nwhite < Nblack.
+
+    total_pieces(Board, NWhite, NBlack)
+    NWhite < NBlack.
 
 %%%%%%%%%%% CASE NO PIECES/MOVES
 play_game(Board, Bot, Color) :-
@@ -108,13 +128,13 @@ play_game(Board, Bot, Color) :-
 
     choose_place(Board, Pos),
 
-    place(Board, Pos, Color, NewBoard),
+    place(Board, Pos, Color, NewBoard), nl,
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     nextPlayer(Bot, OtherPlayer), 
     opponent(Color, NextColor),
-    (   game_over(NewBoard, OtherPlayer, Result)
+    (   game_over(NewBoard, NextColor, Result)
      ->  (   Result = white
          ->  write('Game over! White wins!'), nl
          ;   Result = black
@@ -149,14 +169,14 @@ play_game(Board, Bot, Color) :-
     \+length(Moves, 0),
     higher_value(Moves, Result),
 
-    execute_move(Color, Result, Board, NewBoard),
+    execute_move(Color, Result, Board, NewBoard), nl,
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     nextPlayer(Bot, OtherPlayer), 
     opponent(Color, NextColor),
-    (   game_over(NewBoard, OtherPlayer, Result)
+    (   game_over(NewBoard, NextColor, Result)
      ->  (   Result = white
          ->  write('Game over! White wins!'), nl
          ;   Result = black
@@ -174,7 +194,7 @@ play_game(Board, Bot, Color) :-
 play_game(Board, Bot, Color) :-
     is_bot(Bot),
     repeat,
-    display_board(Board),
+    display_board(Board), nl,
     n_pieces(white, Nwhite),
     n_pieces(black, Nblack),
     write('Number of white pieces left: '), write(Nwhite),nl,
@@ -194,13 +214,13 @@ play_game(Board, Bot, Color) :-
 
     choose_place(Board, Pos),
 
-    place(Board, Pos, Color, NewBoard),
+    place(Board, Pos, Color, NewBoard), nl,
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     nextPlayer(Bot, OtherPlayer), 
     opponent(Color, NextColor),
-    (   game_over(NewBoard, OtherPlayer, Result)
+    (   game_over(NewBoard, NextColor, Result)
      ->  (   Result = white
          ->  write('Game over! White wins!'), nl
          ;   Result = black
@@ -215,7 +235,7 @@ play_game(Board, Bot, Color) :-
 
 play_game(Board, human, Color) :-
     repeat,
-    display_board(Board),
+    display_board(Board), nl,
     n_pieces(white, Nwhite),
     n_pieces(black, Nblack),
     write('Number of white pieces left: '), write(Nwhite),nl,
@@ -320,7 +340,7 @@ execute_extraCapture(Board, Color, (X,Y), NewBoard):-
     change_board_element(Board, X, Y, 0, NewBoard),
     opponent(Color, OtherColor),
     retract_pieces(OtherColor),
-    display_board(NewBoard).
+    display_board(NewBoard), nl.
 
 execute_extraCapture(Board, Color, (X,Y), NewBoard):-
     \+enemy(Board, (X,Y), Color),
@@ -349,7 +369,7 @@ extraCapture(Board, Color, NewBoard):-
 capture_chain(Board, Color, Pos, NewBoard):-
     valid_jump(Board, Pos, _, _, Color),
     write('You can do a chain capture'), nl,
-    display_board(Board),
+    display_board(Board), nl,
     select_capture_move(Board, Color, Pos, NewBoard).
 
 capture_chain(Board, Color, Pos, Board):-
@@ -358,14 +378,14 @@ capture_chain(Board, Color, Pos, Board):-
 
 capture_move(Board, Color, Pos, Dir, NewBoard):-
     move_piece_to_eat(Board, Pos, NewPos, Dir, Color, UpdBoard), nl,
-    display_board(UpdBoard),
+    display_board(UpdBoard), nl,
     extraCapture(UpdBoard, Color, OtherBoard),
     capture_chain(OtherBoard, Color, NewPos, NewBoard).
     
 
 capture_move(Board, Color, Pos, Dir, NewBoard):-
     move_piece_to_eat(Board, Pos, NewPos, Dir, Color, UpdBoard), nl,
-    display_board(UpdBoard),
+    display_board(UpdBoard), nl,
     extraCapture(UpdBoard, Color, NewBoard),
     \+valid_jump(NewBoard, NewPos, _, _, Color).
 

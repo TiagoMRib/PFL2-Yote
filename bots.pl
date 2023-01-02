@@ -72,9 +72,11 @@ chooseMove(Board, Pos, Color, noobBot, Move):-
     write('Moves available for Noob:'), write(Moves), nl,
     \+length(Moves, 0),
     random_member(Move, Moves),
-    write('he chooses:'), write(Move), nl, nl.
+    write('he chooses:'), write(Move), nl.
 
 
+
+    
 chooseMove(Board, Pos, Color, proBot, Move):-    
     once((valid_chains(Board, Pos, Captures, Color),
     write('Chains available for Pro:'), write(Captures), nl,
@@ -82,7 +84,7 @@ chooseMove(Board, Pos, Color, proBot, Move):-
     head_of_list(Captures, Head),
     \+length(Head, 0),
     longest_list(Captures, Move),
-    write('he chooses:'), write(Move), nl, nl)).
+    write('he chooses:'), write(Move), nl)).
 
 
 chooseMove(Board, Pos, Color, proBot, Move):- 
@@ -90,7 +92,7 @@ chooseMove(Board, Pos, Color, proBot, Move):-
     valid_moves(Board, Pos, [Move| Tail], Color),
     write('Moves available for Pro:'), write(Captures), nl,
     \+length([Move| Tail], 0),
-    write('he chooses:'), write(Move), nl, nl.
+    write('he chooses:'), write(Move), nl.
 
 
 % Define the predicate find_pieces/3, which takes a board and a color and returns a list of positions of pieces of that color
@@ -137,7 +139,47 @@ typeofMove(_, Move, jump):-
     length(Move, 1).
 
 
-typeofMove(_, Move, chain):-
-    \+length(Move, 0),
-     \+length(Move, 1).
+higher_value([(Pos, Move) | Tail], Result):-
+    write('Started: '), write((Pos, Move)), nl,
+    higher_value(Tail, (Pos, Move), Result).
+
+
+type(0, place).
+type(1, move).
+type(2, jump).
+type(Number, chain):- Number >= 2.
+
+
+execute_move(Color, ((StartX, StartY), (NextX, NextY)), Board, NewBoard):-
+    change_board_element(Board, StartX, StartY, 0, MidBoard),
+    place(MidBoard, (NextX, NextY), Color, NewBoard).
+
+execute_move(Color, ((StartX, StartY), [(CapX, CapY)]), Board, NewBoard):-
+    DifX is CapX - StartX,
+    FinalX is CapX + DifX,
+    DifY is CapY - StartY,
+    FinalY is CapY + DifY,
+    change_board_element(Board, CapX, CapY, 0, MidBoard),
+    change_board_element(MidBoard, StartX, StartY, 0, FinalBoard),
+    place(FinalBoard, (FinalX,FinalY), Color, NewBoard).
+
+
+execute_move(((StartX, StartY), [(CapX, CapY) | Tail]), Board, NewBoard):-
+    DifX is CapX - StartX,
+    FinalX is CapX + DifX,
+    DifY is CapY - StartY,
+    FinalY is CapY + DifY,
+    change_board_element(Board, CapX, CapY, 0, MidBoard),
+    change_board_element(MidBoard, StartX, StartY, 0, FinalBoard),
+    place(FinalBoard, (FinalX,FinalY), Color, PrintBoard),
+    display_board(PrintBoard), nl,
+    execute_move((FinalX, FinalY), Tail, PrintBoard, NewBoard).
+
+
+
+
+
+
+
+
 
