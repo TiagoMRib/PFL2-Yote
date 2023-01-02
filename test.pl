@@ -1,5 +1,6 @@
 :- consult('rules.pl').
 :- consult('bots.pl').
+:- consult('alt_game.pl').
 
 teste(Result) :-
     create_board(GameBoard),
@@ -100,4 +101,33 @@ teste_smartbot(_):-
 
 
 
+test_game(_):-
+    create_board(Board),
+    set_pieces(white, 12),
+    set_pieces(black, 12),
+
+    % TEST
+    n_pieces(white, TestW),
+    write(TestW), nl,
+    n_pieces(black, TestB),
+    write(TestB), nl,
+    % TEST
+
+    write('Player 1 (white):'), nl,
+    write('1-Human'), nl,
+    write('2-Easy Bot'), nl,
+    write('3-Intelligent Bot'), nl,
+    read(Option1),
+    type_of_player(Option1, Player1),
+    write(Player1), 
+    write('Player 2 (black):'), nl,
+    write('1-Human'), nl,
+    write('2-Easy Bot'), nl,
+    write('3-Intelligent Bot'), nl,
+    read(Option2),
+    type_of_player(Option2, Player2),
+    write(Player2),
+    define_players(Player1, Player2).
+
+    
 

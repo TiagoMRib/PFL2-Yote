@@ -91,7 +91,7 @@ empty(Board, (X,Y)):-
     nth1(X, Row, 0).
 
 
-% Define the predicate pos/2, which takes two arguments:
+% Define the predicate pos/3, which takes three arguments:
 %   - Board: the current state of the board (represented as a list of lists of simbols)
 %   - Pos: the position of the piece to be evaluated (represented as a pair of integers)
 %   - Simbol: the simbol in that position
