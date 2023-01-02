@@ -57,7 +57,7 @@ The **game state** is composed of the **current state for the board**, the **col
 [0,0,0,0,0,0]], 12, 12, w
 ```
 
-#### Intermediate state (11x11)
+#### Intermediate state (6x5)
 
 ```
 [[0,0,b,0,0,0],
@@ -67,7 +67,7 @@ The **game state** is composed of the **current state for the board**, the **col
 [0,b,0,0,0,0]], 9, 8, w
 ```
 
-#### Final state (11x11)
+#### Final state (6x5)
 
 
 ```
