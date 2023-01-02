@@ -1,5 +1,3 @@
-:- consult('tabuleiro.pl').
-
 
 :- consult('tabuleiro.pl').
 
@@ -171,8 +169,8 @@ valid_input(Board, Player, (X, Y), (Dx,Dy), NewPos, Jump) :-
 valid_moves(Board, Pos, Result, Player) :-
     findall(NewPos, valid_jump(Board, Pos, _, NewPos, Player), Moves),
     findall(NewPos, (valid_move(Board, Pos, NewPos)), NewMoves),   %moves  
-    append(NewMoves, Moves, Result),
-    write('Valid Moves:'), write(Result), nl, nl.
+    append(NewMoves, Moves, Result).
+    %write('Valid Moves:'), write(Result), nl, nl.
 
 
 
@@ -208,9 +206,9 @@ chain_capture(Board, Pos, [], _, _) :- % base case: single jump that cannot be c
 %   - Captures: the list of positions of the pieces captured in the chain capture
 %   - Player: the player
 valid_chains(Board, Pos, Captures, Player) :-
-    write('Entering'), nl,
-   findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures),
-   write(Captures).
+    %write('Entering'), nl,
+   findall(Chain, chain_capture(Board, Pos, Chain, _, Player), Captures).
+   %write(Captures).
 
 
 % Define the predicate type_human_move/5, which takes five arguments:
@@ -230,7 +228,7 @@ type_human_move(Board, Color, (SX, SY), (NX, NY), chain):-
 type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-
     CapX is div(SX + NX, 2),
     CapY is div(SY + NY, 2),
-    write((CapX, CapY)),
+    %write((CapX, CapY)),
     valid_jump(Board, (SX, SY), (CapX, CapY), (NX, NY), Color).
 
 % Define the predicate move_piece/5, which takes five arguments:

@@ -31,9 +31,7 @@ initialization:-
 
     % TEST
     n_pieces(white, TestW),
-    write(TestW), nl,
     n_pieces(black, TestB),
-    write(TestB), nl,
     % TEST
 
     write('Player 1 (white):'), nl,
@@ -104,7 +102,7 @@ game_over(Board, Player, black):-
     length(Moves, 0),
 
 
-    total_pieces(Board, NWhite, NBlack)
+    total_pieces(Board, NWhite, NBlack),
     NWhite < NBlack.
 
 %%%%%%%%%%% CASE NO PIECES/MOVES
