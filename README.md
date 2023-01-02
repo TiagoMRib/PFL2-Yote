@@ -129,6 +129,7 @@ Using **findall** we are able to find all valid moves a player can make on a giv
 ### Game state evaluation
 
 
+
 ### Computer move
 
 

@@ -7,7 +7,9 @@
 
 dynamic(n_pieces/2).
 
-% setting the number of pieces with memoization
+% Define the predicate set_pieces/2, which sets the number of pieces of a given color.
+% - color: the color of the pieces
+% - number: the number of pieces of that color
 set_pieces(Color, Number):-
     retract(n_pieces(Color, _)), !,
     assert(n_pieces(Color, Number)).
