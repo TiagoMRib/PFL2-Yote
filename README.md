@@ -130,6 +130,11 @@ The predicate will succeed if the game has ended.
 
 ### Computer move
 
+Due to problems with the game loop, when moving a piece belonging to a computer player, the game goes on an infinite loop.
+
+Anyways, to control the decisions of these movements we used the predicate **AllBestMoves/4** that gets us the best move for each placed piece of a player and we evaluate the best of those with the predicate **higher_value/2**, that does it by comparing their value (1 for simple movement, 2 for a single jump and 1 + number for jumps for a chain capture)
+
+This can be seen in the **testBestMoves/0** test
 
 
 ## Conclusion
