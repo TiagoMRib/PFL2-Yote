@@ -7,6 +7,7 @@
 
 dynamic(n_pieces/2).
 
+% setting the number of pieces with memoization
 set_pieces(Color, Number):-
     retract(n_pieces(Color, _)), !,
     assert(n_pieces(Color, Number)).
@@ -20,6 +21,7 @@ retract_pieces(Color):-
 
 start_game:- menu.
 
+% initialize the game 
 initialization:-
     create_board(Board),
     set_pieces(white, 12),

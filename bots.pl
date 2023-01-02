@@ -83,7 +83,7 @@ is_bot(proBot).
 
 % HELPER
 
-% Define the predicate longer_list/2, which takes a list of lists and a result list as arguments
+% Define the predicate longer_list/2, which takes a list of lists and a result list that will be the longer list inside it as arguments
 longest_list(List, Longest) :-
     longest_list(List, [], Longest).
 
