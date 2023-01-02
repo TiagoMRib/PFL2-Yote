@@ -52,7 +52,7 @@ play_game(Board, NumberWhitePieces, NumberBlackPieces, Color) :-
 
 move_chosen(1, Board, NumberWhitePieces, NumberBlackPieces, white, NewBoard, NewWhitePieces, NewBlackPieces) :-
     NumberWhitePieces > 0, nl,
-    write('Select the position you want to place the white piece:'), nl,
+    write('Select the position you want to place the whiteee piece:'), nl,
     read(Pos), nl,
     atom_chars(Pos, InputList),
     convert_letter_to_number(InputList,NewPos),
