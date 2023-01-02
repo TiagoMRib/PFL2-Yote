@@ -152,3 +152,9 @@ gamestate_example_5([
 [empty,empty,empty,empty,empty,empty,empty,empty],
 [empty,empty,empty,empty,empty,empty,empty,empty]]
 |white]).
+
+
+
+
+
+

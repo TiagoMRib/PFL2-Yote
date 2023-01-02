@@ -241,56 +241,62 @@ type_human_move(Board, Color, (SX, SY), (NX, NY), jump):-
 
 
 move_piece(Board, (X,Y), 1, Type, NewBoard):-
-    %valid_input(Board, Pos, Dir, NewPos, Move),
-    %type_human_move(Board, Pos, NewPos, Move),
-    %delete_pos(Board, Pos, TempBoard),
-    %insert_pos(TempBoard, NewPos, 1, NewBoard).
-    %write('hereeeeeee'), nl,
-    %place(Board, (X,Y), 0, MidBoard), nl,
-    change_board_element(Board, X, Y, 0, MidBoard),
     NewY is Y + 1,
+    empty(Board, (X,NewY)),
+    change_board_element(Board, X, Y, 0, MidBoard),
     place(MidBoard, (X,NewY), Type, NewBoard).
     %change_board_element(MidBoard, X, NewY, Type, NewBoard).
 
 move_piece(Board, (X,Y), 2, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
     NewY is Y - 1,
+    empty(Board, (X,NewY)),
+    change_board_element(Board, X, Y, 0, MidBoard),
     place(MidBoard, (X,NewY), Type, NewBoard).
 
 move_piece(Board, (X,Y), 3, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
     NewX is X + 1,
+    empty(Board, (NewX,Y)),
+    change_board_element(Board, X, Y, 0, MidBoard),
     place(MidBoard, (NewX,Y), Type, NewBoard).
 
 move_piece(Board, (X,Y), 4, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
     NewX is X - 1,
+    empty(Board, (NewX,Y)),
+    change_board_element(Board, X, Y, 0, MidBoard),
     place(MidBoard, (NewX,Y), Type, NewBoard).
 
-move_piece_to_eat(Board, (X,Y), 1, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
+move_piece_to_eat(Board, (X,Y), (X, FinalY), 1, Type, NewBoard):-
     NewY is Y + 1,
-    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
+    enemy(Board, (X, NewY), Type),
     FinalY is Y + 2,
-    place(FinalBoard, (X,FinalY), Type, NewBoard).
-
-move_piece_to_eat(Board, (X,Y), 2, Type, NewBoard):-
+    empty(Board, (X,FinalY)),
     change_board_element(Board, X, Y, 0, MidBoard),
-    NewY is Y - 1,
     change_board_element(MidBoard, X, NewY, 0, FinalBoard),
-    FinalY is Y - 2,
     place(FinalBoard, (X,FinalY), Type, NewBoard).
 
-move_piece_to_eat(Board, (X,Y), 3, Type, NewBoard):-
+move_piece_to_eat(Board, (X,Y), (X, FinalY), 2, Type, NewBoard):-
+    NewY is Y - 1,
+    enemy(Board, (X, NewY), Type),
+    FinalY is Y - 2,
+    empty(Board, (X,FinalY)),
     change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, X, NewY, 0, FinalBoard),
+    place(FinalBoard, (X,FinalY), Type, NewBoard).
+
+move_piece_to_eat(Board, (X,Y), (FinalX, Y), 3, Type, NewBoard):-
     NewX is X + 1,
-    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
+    enemy(Board, (NewX, Y), Type),
     FinalX is X + 2,
+    empty(Board, (FinalX,Y)),
+    change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
     place(FinalBoard, (FinalX,Y), Type, NewBoard).
 
-move_piece_to_eat(Board, (X,Y), 4, Type, NewBoard):-
-    change_board_element(Board, X, Y, 0, MidBoard),
+move_piece_to_eat(Board, (X,Y), (FinalX, Y), 4, Type, NewBoard):-
     NewX is X - 1,
-    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
+    enemy(Board, (NewX, Y), Type),
     FinalX is X - 2,
+    empty(Board, (FinalX,Y)),
+    change_board_element(Board, X, Y, 0, MidBoard),
+    change_board_element(MidBoard, NewX, Y, 0, FinalBoard),
     place(FinalBoard, (FinalX,Y), Type, NewBoard).

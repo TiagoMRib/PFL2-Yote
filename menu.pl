@@ -60,3 +60,6 @@ menu_option(2):-
     option(1, 'Easy'),
     option(2, 'Hard'),
     write('******************************'),nl.
+
+
+

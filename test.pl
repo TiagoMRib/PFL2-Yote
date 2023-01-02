@@ -1,5 +1,6 @@
 :- consult('rules.pl').
 :- consult('bots.pl').
+:- consult('alt_game.pl').
 
 teste(Result) :-
     create_board(GameBoard),
@@ -9,15 +10,10 @@ teste(Result) :-
     print(NewerGameBoard).
 
 
-teste_empty(Result) :-
+teste_empty_out(Result) :-
     create_board(Board),
     print(Board),
-    empty(Board, (3,2)),
-    place(Board, (3,2), white, NewBoard),
-    print(NewBoard), nl,
-    empty(NewBoard, (3,2)),
-    place(NewBoard, (3,2), black, NewerBoard),
-    print(NewerBoard), nl.
+    empty(Board, (9,2)).
 
 teste_empty(Result) :-
     create_board(Board),
@@ -90,10 +86,12 @@ teste_inteligence(Result):-
 
 teste_bots(_) :-
     capture_Board(Board),
-    chooseMove(Board, (X,Y), white, noobBot, Move),
+    chooseMove(Board, (3,3), white, noobBot, Move),
     write('Idiot:'),write(Move),nl,
-    chooseMove(Board, (X,Y), white, proBot, OtherMove),
-    write('Smart:'),write(OtherMove),nl.
+    chooseMove(Board, (3,3), white, proBot, OtherMove),
+    write('Smart:'),write(OtherMove),nl,
+    allBestMoves(Board, w, proBot, Moves),
+    write('Best Moves: '), write(Moves), nl.
 
 
 teste_smartbot(_):-
@@ -103,6 +101,44 @@ teste_smartbot(_):-
     typeofMove(OtherMove, Type),
     write(Type), nl.
 
+testBestMoves:-
+    allBestMoves([
+        [0,0,b,0,0,0],
+        [0,w,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,w,0,0,0,0],
+        [0,b,0,0,0,0]], b, proBot, Moves),
+    write('Best Moves: '), write(Moves), nl.
 
 
+
+test_game(_):-
+    create_board(Board),
+    set_pieces(white, 12),
+    set_pieces(black, 12),
+
+    % TEST
+    n_pieces(white, TestW),
+    write(TestW), nl,
+    n_pieces(black, TestB),
+    write(TestB), nl,
+    % TEST
+
+    write('Player 1 (white):'), nl,
+    write('1-Human'), nl,
+    write('2-Easy Bot'), nl,
+    write('3-Intelligent Bot'), nl,
+    read(Option1),
+    type_of_player(Option1, Player1),
+    write(Player1), 
+    write('Player 2 (black):'), nl,
+    write('1-Human'), nl,
+    write('2-Easy Bot'), nl,
+    write('3-Intelligent Bot'), nl,
+    read(Option2),
+    type_of_player(Option2, Player2),
+    write(Player2),
+    define_players(Player1, Player2).
+
+    
 
