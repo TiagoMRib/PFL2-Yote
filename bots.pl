@@ -4,42 +4,19 @@
 
 dynamic(nextPlayer/2).
 
+type_of_player(1, human).
+type_of_player(2, noobBot).
+type_of_player(3, proBot).
+
+is_bot(noobBot).
+is_bot(proBot).
+
 % Define the predicate define_players/2, which defines the player as a human or a bot
-define_players(Human, Human):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(Human, Human)).
+define_players(Player1, Player2):-
+    assert(nextPlayer(Player1, Player2)),
+    assert(nextPlayer(Player2, Player3)).
 
-define_players(Human, NoobBot):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(Human, NoobBot)).
 
-define_players(Human, ProBot):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(Human, ProBot)).
-
-define_players(NoobBot, Human):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(NoobBot, Human)).
-
-define_players(NoobBot, NoobBot):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(NoobBot, NoobBot)).
-
-define_players(NoobBot, ProBot):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(NoobBot, ProBot)).
-
-define_players(ProBot, Human):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(ProBot, Human)).
-
-define_players(ProBot, NoobBot):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(ProBot, NoobBot)).
-
-define_players(ProBot, ProBot):-
-    retract(nextPlayer(_, _)),
-    assert(nextPlayer(ProBot, ProBot)).
 
 
 % HELPER

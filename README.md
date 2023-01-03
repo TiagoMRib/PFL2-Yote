@@ -112,6 +112,11 @@ The strategy for checking if the game ended was to create the predicate **game_o
 
 Since the game has four ways to end the game, the predicate gameOver/2 needed to have a rule for each win condition.
 
+When both players have 3 or fewer pieces each it's a draw and when a player doesn't have moves available.
+
+In this last case, wins who has more pieces.
+
+
 ### List of valid moves:
 
 To ensure that a move is executable the predicate **valid_moves/4** verifies all the conditions mentioned in the move execution section.

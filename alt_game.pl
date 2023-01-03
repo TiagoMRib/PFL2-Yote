@@ -40,12 +40,14 @@ initialization:-
     write('3-Intelligent Bot'), nl,
     read(Option1), nl,
     type_of_player(Option1, Player1),
+    write('Player1:'), write(Player1), nl,
     write('Player 2 (black):'), nl,
     write('1-Human'), nl,
     write('2-Easy Bot'), nl,
     write('3-Intelligent Bot'), nl,
     read(Option2), nl,
     type_of_player(Option2, Player2),
+    write('Player2:'), write(Player2), nl,
     define_players(Player1, Player2),
 
     play_game(Board, Player1, white).
@@ -130,19 +132,18 @@ play_game(Board, Bot, Color) :-
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    nextPlayer(Bot, OtherPlayer), 
     opponent(Color, NextColor),
-    (   game_over(NewBoard, NextColor, Result)
-     ->  (   Result = white
-         ->  write('Game over! White wins!'), nl
-         ;   Result = black
-         ->  write('Game over! Black wins!'), nl
-         ;   Result = draw
-         ->  write('Draw'), nl
-
-        )
-     ;   play_game(NewBoard, OtherPlayer, NextColor)
-    ).
+    play_game(NewBoard, human, NextColor).
+   % (   game_over(NewBoard, NextColor, Result)
+   %  ->  (   Result = white
+   %      ->  write('Game over! White wins!'), nl
+   %      ->  write('Game over! Black wins!'), nl
+   %      ;   Result = draw
+   %      ->  write('Draw'), nl
+%
+ %      )
+   %  ;   play_game(NewBoard, OtherPlayer, NextColor)
+ %   ).
 
 
 play_game(Board, Bot, Color) :-
@@ -172,9 +173,9 @@ play_game(Board, Bot, Color) :-
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    nextPlayer(Bot, OtherPlayer), 
     opponent(Color, NextColor),
-    (   game_over(NewBoard, NextColor, Result)
+    play_game(NewBoard, human, NextColor).
+/*    (   game_over(NewBoard, NextColor, Result)
      ->  (   Result = white
          ->  write('Game over! White wins!'), nl
          ;   Result = black
@@ -184,7 +185,7 @@ play_game(Board, Bot, Color) :-
 
         )
      ;   play_game(NewBoard, OtherPlayer, NextColor)
-    ).
+    ). */
 
 
 
@@ -216,9 +217,10 @@ play_game(Board, Bot, Color) :-
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    nextPlayer(Bot, OtherPlayer), 
+  %  nextPlayer(Bot, OtherPlayer), 
     opponent(Color, NextColor),
-    (   game_over(NewBoard, NextColor, Result)
+    play_game(NewBoard, human, NextColor).
+ /*   (   game_over(NewBoard, NextColor, Result)
      ->  (   Result = white
          ->  write('Game over! White wins!'), nl
          ;   Result = black
@@ -228,7 +230,7 @@ play_game(Board, Bot, Color) :-
 
         )
      ;   play_game(NewBoard, OtherPlayer, NextColor)
-    ).
+    ). */
 
 
 play_game(Board, human, Color) :-
@@ -243,6 +245,8 @@ play_game(Board, human, Color) :-
     read(Option), nl,
     move(Option, Board, Color, NewBoard), 
     nextPlayer(human, OtherPlayer), 
+
+
     opponent(Color, NextColor),
     (   game_over(NewBoard, OtherPlayer, Result)
      ->  (   Result = white
